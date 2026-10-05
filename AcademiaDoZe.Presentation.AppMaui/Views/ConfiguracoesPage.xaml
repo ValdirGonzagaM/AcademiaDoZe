@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
+             x:Class="AcademiaDoZe.Presentation.AppMaui.Views.ConfiguracoesPage"
+             x:DataType="vm:ConfiguracoesViewModel"
+             Title="Configurações">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Label Text="Configurações do Sistema" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" />
+
+            <!-- SEÇÃO TEMA -->
+            <Border StrokeShape="RoundRectangle 10" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Tema do Aplicativo" FontSize="18" FontAttributes="Bold" />
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Button Text="Claro" Command="{Binding SalvarTemaCommand}" CommandParameter="Light" />
+                        <Button Text="Escuro" Command="{Binding SalvarTemaCommand}" CommandParameter="Dark" />
+                        <Button Text="Sistema" Command="{Binding SalvarTemaCommand}" CommandParameter="System" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- SEÇÃO BANCO DE DADOS -->
+            <Border StrokeShape="RoundRectangle 10" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Banco de Dados" FontSize="18" FontAttributes="Bold" />
+
+                    <Picker SelectedItem="{Binding ProvedorBanco}">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>SQLite</x:String>
+                                <x:String>MySQL</x:String>
+                                <x:String>SQL Server</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+
+                    <Button Text="Salvar Credenciais" Command="{Binding SalvarBancoCommand}" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

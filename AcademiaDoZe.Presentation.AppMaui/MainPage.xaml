@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AcademiaDoZe.Presentation.AppMaui.MainPage"
+             Title="Dashboard">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,20" Spacing="20" HorizontalOptions="Center">
+
+            <!-- Logótipo Obrigatório do Aluno -->
+            <Border StrokeShape="RoundRectangle 15"
+                    Padding="10"
+                    HorizontalOptions="Center"
+                    StrokeThickness="1">
+                <Image Source="logo_aluno.png"
+                       HeightRequest="180"
+                       WidthRequest="180"
+                       Aspect="AspectFit"
+                       SemanticProperties.Description="Logotipo da Academia do Zé por Valdir Gonzaga" />
+            </Border>
+
+            <!-- Boas-vindas e Identificação -->
+            <Label Text="Academia do Zé"
+                   FontSize="26"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Desenvolvido por: Valdir Gonzaga"
+                   FontSize="16"
+                   FontAttributes="Italic"
+                   HorizontalOptions="Center" />
+
+            <!-- Resumo/Atalhos Rápidos do Dashboard -->
+            <Border StrokeShape="RoundRectangle 10" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Status do Sistema" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="• Banco de Dados: Conectado" FontSize="14" />
+                    <Label Text="• Tema Atual: Configurado via Preferências" FontSize="14" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

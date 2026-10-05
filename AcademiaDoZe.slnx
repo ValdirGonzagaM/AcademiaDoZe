@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="AcademiaDoZe.Application/AcademiaDoZe.Application.csproj" Id="8a36cb67-1c5f-4855-acab-916b634198ee" />
+  <Project Path="AcademiaDoZe.Domain.Tests/AcademiaDoZe.Domain.Tests.csproj" Id="250a1cc3-a92e-4fcd-a5e7-7b3bbacf5d63" />
+  <Project Path="AcademiaDoZe.Domain/AcademiaDoZe.Domain.csproj" Id="c3caa711-b1b3-4505-9173-5821b0e8a5ae" />
+  <Project Path="AcademiaDoZe.Infrastructure.Tests/AcademiaDoZe.Infrastructure.Tests.csproj" Id="a3e02cb0-1add-4fdb-b538-311ac2f97732" />
+  <Project Path="AcademiaDoZe.Infrastructure/AcademiaDoZe.Infrastructure.csproj" />
+  <Project Path="AcademiaDoZe.Presentation.AppMaui/AcademiaDoZe.Presentation.AppMaui.csproj" Id="449bcfc2-3c8b-4393-87a7-f04dd52ed4b7" />
+</Solution>
