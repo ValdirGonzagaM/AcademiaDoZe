@@ -1,4 +1,4 @@
-﻿using AcademiaDoZe.Domain.ValueObjects;
+using AcademiaDoZe.Domain.ValueObjects;
 using Xunit;
 
 namespace AcademiaDoZe.Domain.Tests.ValueObjects;
@@ -6,7 +6,7 @@ namespace AcademiaDoZe.Domain.Tests.ValueObjects;
 public class CpfTests
 {
     [Theory]
-    [InlineData("123.456.789-00")] // Exemplo de formato incorreto se não tiver 11 dígitos limpos
+    [InlineData("123456789012")] // 12 dígitos (inválido)
     [InlineData("1111111111")]    // 10 dígitos (inválido)
     [InlineData("invalid-cpf")]
     public void Cpf_QuandoInvalido_DeveRetornarFalha(string cpfInvalido)
@@ -16,17 +16,16 @@ public class CpfTests
 
         // Assert
         Assert.True(resultado.IsFailure);
-        Assert.Equal("CPF deve possuir 11 dígitos.", resultado.Notifications.First().ToString());
+        Assert.Equal("CPF deve possuir 11 dígitos.", Assert.Single(resultado.Notifications).Mensagem);
     }
 
-    [Fact]
-    public void Cpf_QuandoValido_DeveRetornarSucessoEInstanciaCorreta()
+    [Theory]
+    [InlineData("08615141908")]
+    [InlineData("086.151.419-08")]
+    public void Cpf_ComOnzeDigitos_DeveRetornarSucessoENormalizar(string cpfInformado)
     {
-        // Arrange
-        var cpfValido = "08615141908"; // 11 dígitos
-
         // Act
-        var resultado = Cpf.Criar(cpfValido);
+        var resultado = Cpf.Criar(cpfInformado);
 
         // Assert
         Assert.True(resultado.IsSuccess);

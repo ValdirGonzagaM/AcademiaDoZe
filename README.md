@@ -14,7 +14,7 @@ A solução está estruturada em 4 projetos principais:
 ## 🧪 Qualidade e Testes
 
 - **CRUD de pessoas (SQLite):** testes de integração em `AcademiaDoZe.Application.Tests` cobrem aluno e colaborador, incluindo persistência de fotos, filtros e exclusão.
-- **Domínio:** a suíte existente executa 173 casos; três expectativas de `CpfTests` divergem da implementação atual.
+- **Domínio:** 174 testes aprovados, incluindo normalização de CPF formatado e rejeição de quantidades inválidas de dígitos. A regra atual verifica o tamanho, sem calcular dígitos verificadores.
 - **Android:** aplicação MAUI com módulos de alunos/colaboradores, câmera, galeria e banco SQLite inicializado no diretório privado do app.
 - **Demonstração:** veja o [roteiro e instruções de execução](docs/DEMONSTRACAO.md).
 

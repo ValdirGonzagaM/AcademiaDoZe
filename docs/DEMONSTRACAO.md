@@ -33,7 +33,7 @@ dotnet test AcademiaDoZe.Application.Tests/AcademiaDoZe.Application.Tests.csproj
 
 A suíte usa um SQLite temporário por teste e cobre os dois ciclos de CRUD, normalização do CPF na busca, persistência dos bytes de foto após reabrir o banco, endereço/complemento, senha preservada e armazenada com hash, filtros e rejeição de duplicatas/dados inválidos. Ela não substitui a execução de câmera, galeria e gravação na interface.
 
-Os testes de domínio preexistentes têm três falhas em `CpfTests`, por divergências entre suas expectativas e a implementação. Os testes MySQL preexistentes dependem de banco externo e não são necessários para o fluxo SQLite do aplicativo.
+Os 174 testes de domínio passaram após corrigir as expectativas de `CpfTests`. A regra atual aceita 11 dígitos após normalização; ela não calcula os dígitos verificadores do CPF. Os testes MySQL preexistentes dependem de banco externo e não são necessários para o fluxo SQLite do aplicativo.
 
 ## Compilação
 
@@ -44,7 +44,7 @@ Permissões de câmera e biblioteca foram declaradas também nos arquivos iOS/Ma
 ## Resultado desta tentativa na nuvem
 
 - Compilação Android x86_64 concluída; APK de desenvolvimento em `artifacts/AcademiaDoZe-emulador.apk`.
-- Sete testes novos de integração passaram. A suíte de domínio manteve 170 aprovados e as três falhas preexistentes de CPF.
+- Sete testes novos de integração passaram. Após a correção dos testes de CPF, a suíte de domínio passou com 174 aprovados e nenhuma falha.
 - O host não oferece KVM/virtualização de CPU (`emulator-check accel` informa ausência de vmx/svm). Foi tentada a emulação TCG por software.
 - O Android chegou a concluir o boot, mas exibiu **Process system isn't responding**; a instalação e a abertura do aplicativo não foram concluídas. Captura dessa falha em `artifacts/emulador-sem-aceleracao.png`.
 - Não foi produzido vídeo dos ciclos, nem foi validada a câmera/galeria na interface. Execute o APK num emulador x86_64 com aceleração de hardware para concluir o roteiro. Este resultado é uma limitação do ambiente de execução; não estabelece o funcionamento visual do aplicativo.
