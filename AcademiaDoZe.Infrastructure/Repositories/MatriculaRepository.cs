@@ -1,4 +1,4 @@
-﻿using AcademiaDoZe.Domain.Entities;
+using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Domain.Enums;
 using AcademiaDoZe.Domain.Repositories;
 using AcademiaDoZe.Domain.ValueObjects;
@@ -110,7 +110,9 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
         try
         {
             string query = $"{BaseSelectQuery} WHERE m.id_matricula = @Id";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@Id", id, DbType.Int32);
             await using var reader = await command.ExecuteReaderAsync(cancellationToken);
             return await reader.ReadAsync(cancellationToken) ? Map(reader) : null;
@@ -126,7 +128,9 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
         try
         {
             string query = $"{BaseSelectQuery} ORDER BY m.data_inicio DESC";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             await using var reader = await command.ExecuteReaderAsync(cancellationToken);
             var matriculas = new List<Matricula>();
             while (await reader.ReadAsync(cancellationToken))
@@ -149,7 +153,9 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
                 (aluno_id, plano, data_inicio, data_fim, objetivo, restricao_medica, obs_restricao, laudo_medico) 
                 VALUES (@AlunoId, @Plano, @DataInicio, @DataFim, @Objetivo, @RestricaoMedica, @ObsRestricao, @LaudoMedico)");
 
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@AlunoId", entity.AlunoMatricula.Id, DbType.Int32);
             command.AddParameter("@Plano", (int)entity.Plano, DbType.Int32);
             command.AddParameter("@DataInicio", entity.DataInicio, DbType.Date);
@@ -197,7 +203,9 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
                 laudo_medico = @LaudoMedico 
                 WHERE id_matricula = @Id";
 
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@Id", entity.Id, DbType.Int32);
             command.AddParameter("@AlunoId", entity.AlunoMatricula.Id, DbType.Int32);
             command.AddParameter("@Plano", (int)entity.Plano, DbType.Int32);
@@ -227,7 +235,9 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
         try
         {
             string query = "DELETE FROM tb_matricula WHERE id_matricula = @Id";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@Id", id, DbType.Int32);
             var result = await command.ExecuteNonQueryAsync(cancellationToken);
             return result > 0;
@@ -243,7 +253,9 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
         try
         {
             string query = $"{BaseSelectQuery} WHERE m.aluno_id = @AlunoId ORDER BY m.data_inicio DESC";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@AlunoId", alunoId, DbType.Int32);
             await using var reader = await command.ExecuteReaderAsync(cancellationToken);
             var matriculas = new List<Matricula>();
@@ -264,7 +276,9 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
         try
         {
             string query = $"{BaseSelectQuery} WHERE m.aluno_id = @AlunoId AND m.data_fim >= CURDATE() ORDER BY m.data_fim DESC";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@AlunoId", alunoId, DbType.Int32);
             await using var reader = await command.ExecuteReaderAsync(cancellationToken);
             return await reader.ReadAsync(cancellationToken) ? Map(reader) : null;
@@ -286,7 +300,9 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
         try
         {
             string query = $"{BaseSelectQuery} WHERE m.data_fim >= CURDATE() {(alunoId > 0 ? "AND m.aluno_id = @id" : "")} ORDER BY m.data_fim ASC";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             if (alunoId > 0)
             {
                 command.AddParameter("@id", alunoId, DbType.Int32);
@@ -310,7 +326,9 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
         try
         {
             string query = $"{BaseSelectQuery} WHERE m.data_fim >= CURDATE() AND m.data_fim <= DATE_ADD(CURDATE(), INTERVAL @Dias DAY) ORDER BY m.data_fim ASC";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@Dias", dias, DbType.Int32);
             await using var reader = await command.ExecuteReaderAsync(cancellationToken);
             var matriculas = new List<Matricula>();
@@ -331,7 +349,9 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
         try
         {
             string query = $"{BaseSelectQuery} WHERE m.plano = @Plano ORDER BY a.nome";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@Plano", (int)plano, DbType.Int32);
             await using var reader = await command.ExecuteReaderAsync(cancellationToken);
             var matriculas = new List<Matricula>();

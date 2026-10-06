@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroPage"
-             Title="LogradouroPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+ x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroPage" Title="Novo logradouro">
+ <ScrollView><VerticalStackLayout Padding="24" Spacing="12">
+  <Label Text="Endereço da pessoa" FontSize="24" FontAttributes="Bold" />
+  <Entry Placeholder="CEP (8 dígitos)" Keyboard="Numeric" Text="{Binding Logradouro.Cep}" />
+  <Entry Placeholder="Nome da rua" Text="{Binding Logradouro.Nome}" />
+  <Entry Placeholder="Bairro" Text="{Binding Logradouro.Bairro}" />
+  <Entry Placeholder="Cidade" Text="{Binding Logradouro.Cidade}" />
+  <Entry Placeholder="UF (ex.: SC)" MaxLength="2" Text="{Binding Logradouro.Estado}" />
+  <Entry Placeholder="País (ex.: Brasil)" Text="{Binding Logradouro.Pais}" />
+  <Button Text="Salvar logradouro" Command="{Binding SaveCommand}" />
+  <Button Text="Cancelar" Command="{Binding CancelCommand}" />
+ </VerticalStackLayout></ScrollView>
 </ContentPage>

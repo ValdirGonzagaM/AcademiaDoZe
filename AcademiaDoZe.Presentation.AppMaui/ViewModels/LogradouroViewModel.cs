@@ -1,4 +1,4 @@
-﻿using System.Windows.Input;
+using System.Windows.Input;
 using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Interfaces;
 
@@ -7,6 +7,7 @@ namespace AcademiaDoZe.Presentation.AppMaui.ViewModels;
 public class LogradouroViewModel
 {
     private readonly ILogradouroService _logradouroService;
+    private bool _saving;
 
     public LogradouroDto Logradouro { get; set; } = new()
     {
@@ -31,10 +32,16 @@ public class LogradouroViewModel
 
     private async Task OnSaveAsync()
     {
-        // Caso o método no seu ILogradouroService tenha outro nome (ex: SalvarAsync ou IncluirAsync),
-        // ajuste apenas o nome da chamada abaixo:
-        await _logradouroService.AdicionarAsync(Logradouro);
-        await Shell.Current.GoToAsync("..");
+        if (_saving) return;
+        _saving = true;
+        try
+        {
+            Logradouro.Estado = Logradouro.Estado.Trim().ToUpperInvariant();
+            await _logradouroService.AdicionarAsync(Logradouro);
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex) { await Shell.Current.DisplayAlertAsync("Atenção", ex.Message, "OK"); }
+        finally { _saving = false; }
     }
 
     private async Task OnCancelAsync()

@@ -8,4 +8,5 @@
   <Project Path="AcademiaDoZe.Infrastructure.Tests/AcademiaDoZe.Infrastructure.Tests.csproj" Id="a3e02cb0-1add-4fdb-b538-311ac2f97732" />
   <Project Path="AcademiaDoZe.Infrastructure/AcademiaDoZe.Infrastructure.csproj" />
   <Project Path="AcademiaDoZe.Presentation.AppMaui/AcademiaDoZe.Presentation.AppMaui.csproj" Id="449bcfc2-3c8b-4393-87a7-f04dd52ed4b7" />
+  <Project Path="AcademiaDoZe.Application.Tests/AcademiaDoZe.Application.Tests.csproj" />
 </Solution>

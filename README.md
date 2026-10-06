@@ -13,8 +13,10 @@ A solução está estruturada em 4 projetos principais:
 
 ## 🧪 Qualidade e Testes
 
-- **Testes Unitários:** 183 testes aprovados (100% de sucesso).
-- **Status do Build:** Compilação concluída sem erros ou alertas críticos.
+- **CRUD de pessoas (SQLite):** testes de integração em `AcademiaDoZe.Application.Tests` cobrem aluno e colaborador, incluindo persistência de fotos, filtros e exclusão.
+- **Domínio:** a suíte existente executa 173 casos; três expectativas de `CpfTests` divergem da implementação atual.
+- **Android:** aplicação MAUI com módulos de alunos/colaboradores, câmera, galeria e banco SQLite inicializado no diretório privado do app.
+- **Demonstração:** veja o [roteiro e instruções de execução](docs/DEMONSTRACAO.md).
 
 ## 🚀 Tecnologias Utilizadas
 

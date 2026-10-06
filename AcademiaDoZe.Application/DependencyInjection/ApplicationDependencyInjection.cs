@@ -1,4 +1,4 @@
-﻿using AcademiaDoZe.Application.Interfaces;
+using AcademiaDoZe.Application.Interfaces;
 using AcademiaDoZe.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +12,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IColaboradorService, ColaboradorService>();
         services.AddScoped<IMatriculaService, MatriculaService>();
 
+        services.AddScoped<ILogradouroService, LogradouroService>();
         return services;
     }
 }

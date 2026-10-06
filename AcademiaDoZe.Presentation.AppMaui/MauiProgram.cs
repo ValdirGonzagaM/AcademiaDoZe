@@ -1,4 +1,4 @@
-﻿using AcademiaDoZe.Presentation.AppMaui.Configuration;
+using AcademiaDoZe.Presentation.AppMaui.Configuration;
 using AcademiaDoZe.Presentation.AppMaui.ViewModels;
 using AcademiaDoZe.Presentation.AppMaui.Views;
 using Microsoft.Extensions.Logging;
@@ -19,6 +19,11 @@ public static class MauiProgram
             });
 
         ConfigurationHelper.ConfigureServices(builder.Services);
+
+        builder.Services.AddTransient<Services.PessoaCadastro>();
+        builder.Services.AddSingleton<Services.FotoService>();
+        builder.Services.AddTransient<ColaboradorListPage>();
+        builder.Services.AddTransient<AlunoListPage>();
 
         // ViewModels
         builder.Services.AddTransient<DashboardListViewModel>();

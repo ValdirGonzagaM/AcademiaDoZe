@@ -36,5 +36,11 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Tirar a foto do aluno ou colaborador durante o cadastro.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Selecionar uma foto para o cadastro de aluno ou colaborador.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Salvar fotos capturadas para o cadastro.</string>
 </dict>
 </plist>

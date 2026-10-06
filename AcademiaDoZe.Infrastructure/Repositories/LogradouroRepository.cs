@@ -1,4 +1,4 @@
-﻿using AcademiaDoZe.Domain.Entities;
+using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Domain.Enums;
 using AcademiaDoZe.Domain.Repositories;
 using AcademiaDoZe.Domain.ValueObjects;
@@ -19,7 +19,9 @@ public class LogradouroRepository : BaseRepository, ILogradouroRepository
         try
         {
             string query = "SELECT id_logradouro, cep, nome, bairro, cidade, estado, pais FROM tb_logradouro WHERE id_logradouro = @Id";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@Id", id, DbType.Int32);
             await using var reader = await command.ExecuteReaderAsync(cancellationToken);
             return await reader.ReadAsync(cancellationToken) ? Map(reader) : null;
@@ -35,7 +37,9 @@ public class LogradouroRepository : BaseRepository, ILogradouroRepository
         try
         {
             string query = "SELECT id_logradouro, cep, nome, bairro, cidade, estado, pais FROM tb_logradouro ORDER BY nome";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             await using var reader = await command.ExecuteReaderAsync(cancellationToken);
             var lista = new List<Logradouro>();
             while (await reader.ReadAsync(cancellationToken))
@@ -55,7 +59,9 @@ public class LogradouroRepository : BaseRepository, ILogradouroRepository
         try
         {
             string query = FormatInsertQuery("INSERT INTO tb_logradouro (cep, nome, bairro, cidade, estado, pais) VALUES (@Cep, @Nome, @Bairro, @Cidade, @Estado, @Pais)");
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@Cep", entity.Cep.Valor, DbType.String);
             command.AddParameter("@Nome", entity.Nome, DbType.String);
             command.AddParameter("@Bairro", entity.Bairro, DbType.String);
@@ -79,7 +85,9 @@ public class LogradouroRepository : BaseRepository, ILogradouroRepository
         try
         {
             string query = "UPDATE tb_logradouro SET cep = @Cep, nome = @Nome, bairro = @Bairro, cidade = @Cidade, estado = @Estado, pais = @Pais WHERE id_logradouro = @Id";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@Id", entity.Id, DbType.Int32);
             command.AddParameter("@Cep", entity.Cep.Valor, DbType.String);
             command.AddParameter("@Nome", entity.Nome, DbType.String);
@@ -106,7 +114,9 @@ public class LogradouroRepository : BaseRepository, ILogradouroRepository
         try
         {
             string query = "DELETE FROM tb_logradouro WHERE id_logradouro = @Id";
-            await using var command = await CreateCommandAsync(query, cancellationToken);
+            await using var connection = await OpenConnectionAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = query;
             command.AddParameter("@Id", id, DbType.Int32);
             return await command.ExecuteNonQueryAsync(cancellationToken) > 0;
         }

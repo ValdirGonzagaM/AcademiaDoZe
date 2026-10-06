@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroListPage"
-             Title="LogradouroListPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+ x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroListPage" Title="Logradouros">
+ <Grid Padding="20" RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="12">
+  <Button Text="+ Novo logradouro" Command="{Binding AddLogradouroCommand}" />
+  <Picker Grid.Row="1" Title="Filtro" SelectedItem="{Binding SelectedFilterType}">
+   <Picker.Items><x:String>Nome</x:String><x:String>Cep</x:String><x:String>Cidade</x:String><x:String>Id</x:String></Picker.Items>
+  </Picker>
+  <SearchBar Grid.Row="2" Placeholder="Buscar endereço" Text="{Binding SearchText}" SearchCommand="{Binding SearchLogradourosCommand}" />
+  <Button Grid.Row="3" Text="Buscar" Command="{Binding SearchLogradourosCommand}" />
+  <CollectionView Grid.Row="4" ItemsSource="{Binding Logradouros}">
+   <CollectionView.EmptyView><Label Text="Nenhum logradouro encontrado." /></CollectionView.EmptyView>
+   <CollectionView.ItemTemplate><DataTemplate>
+    <Border Padding="14" Margin="0,5" StrokeShape="RoundRectangle 14"><VerticalStackLayout Spacing="5">
+     <Label Text="{Binding Nome}" FontAttributes="Bold" FontSize="18" />
+     <Label Text="{Binding Cep, StringFormat='CEP: {0}'}" /><Label Text="{Binding Cidade}" />
+    </VerticalStackLayout></Border>
+   </DataTemplate></CollectionView.ItemTemplate>
+  </CollectionView>
+ </Grid>
 </ContentPage>

@@ -1,7 +1,9 @@
-﻿using AcademiaDoZe.Domain.Enums;
+using AcademiaDoZe.Domain.Enums;
 using System.Data;
 using System.Data.Common;
 using MySql.Data.MySqlClient;
+using Microsoft.Data.Sqlite;
+using Microsoft.Data.SqlClient;
 
 namespace AcademiaDoZe.Infrastructure.Repositories;
 
@@ -16,19 +18,26 @@ public abstract class BaseRepository
         DatabaseType = databaseType;
     }
 
-    protected async Task<DbCommand> CreateCommandAsync(string query, CancellationToken cancellationToken = default)
+    protected async Task<DbConnection> OpenConnectionAsync(CancellationToken cancellationToken = default)
     {
-        var connection = new MySqlConnection(ConnectionString);
-        await connection.OpenAsync(cancellationToken);
-        var command = connection.CreateCommand();
-        command.CommandText = query;
-        return command;
+        DbConnection connection = DatabaseType switch
+        {
+            DatabaseType.Sqlite => new SqliteConnection(ConnectionString),
+            DatabaseType.SqlServer => new SqlConnection(ConnectionString),
+            DatabaseType.MySQL => new MySqlConnection(ConnectionString),
+            _ => throw new NotSupportedException("Provedor de banco desconhecido.")
+        };
+        try { await connection.OpenAsync(cancellationToken); return connection; }
+        catch { await connection.DisposeAsync(); throw; }
     }
 
-    protected string FormatInsertQuery(string query)
+    protected string FormatInsertQuery(string query) => DatabaseType switch
     {
-        return $"{query}; SELECT LAST_INSERT_ID();";
-    }
+        DatabaseType.Sqlite => $"{query}; SELECT last_insert_rowid();",
+        DatabaseType.SqlServer => $"{query}; SELECT SCOPE_IDENTITY();",
+        _ => $"{query}; SELECT LAST_INSERT_ID();"
+    };
+
 }
 
 public static class DbCommandExtensions
@@ -37,7 +46,7 @@ public static class DbCommandExtensions
     {
         var param = command.CreateParameter();
         param.ParameterName = name;
-        param.Value = value ?? DBNull.Value;
+        param.Value = value is DateOnly date ? date.ToDateTime(TimeOnly.MinValue) : value ?? DBNull.Value;
         param.DbType = type;
         command.Parameters.Add(param);
     }

@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using AcademiaDoZe.Presentation.AppMaui.Messages;
 
 namespace AcademiaDoZe.Presentation.AppMaui;
@@ -23,6 +23,8 @@ public partial class App : Microsoft.Maui.Controls.Application
             });
         });
 
-        MainPage = new AppShell();
+
     }
+
+    protected override Window CreateWindow(IActivationState? activationState) => new(new AppShell());
 }

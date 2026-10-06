@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -45,6 +45,11 @@ public partial class LogradouroListViewModel : ObservableObject
             if (string.IsNullOrWhiteSpace(SearchText))
             {
                 resultados = await _logradouroService.ObterTodosAsync(cts.Token);
+            }
+            else if (SelectedFilterType == "Nome")
+            {
+                resultados = (await _logradouroService.ObterTodosAsync(cts.Token))
+                    .Where(l => l.Nome.Contains(SearchText.Trim(), StringComparison.OrdinalIgnoreCase));
             }
             else if (SelectedFilterType == "Cep")
             {

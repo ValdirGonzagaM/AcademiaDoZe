@@ -7,21 +7,27 @@
     xmlns:views="clr-namespace:AcademiaDoZe.Presentation.AppMaui.Views"
     Title="Academia do Zé">
 
-    <FlyoutItem Title="Início" Icon="icon_dashboard.png">
+    <FlyoutItem Title="Início">
         <ShellContent
             Title="Início"
             ContentTemplate="{DataTemplate local:MainPage}"
             Route="MainPage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Logradouros" Icon="icon_logradouro.png">
+    <FlyoutItem Title="Colaboradores">
+        <ShellContent Title="Colaboradores" ContentTemplate="{DataTemplate views:ColaboradorListPage}" Route="ColaboradorListPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Alunos">
+        <ShellContent Title="Alunos" ContentTemplate="{DataTemplate views:AlunoListPage}" Route="AlunoListPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Logradouros">
         <ShellContent
             Title="Logradouros"
             ContentTemplate="{DataTemplate views:LogradouroListPage}"
             Route="LogradouroListPage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Configurações" Icon="icon_settings.png">
+    <FlyoutItem Title="Configurações">
         <ShellContent
             Title="Configurações"
             ContentTemplate="{DataTemplate views:ConfiguracoesPage}"

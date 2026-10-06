@@ -1,4 +1,4 @@
-﻿using AcademiaDoZe.Application.DTOs;
+using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Enums;
 using AcademiaDoZe.Application.Interfaces;
 using AcademiaDoZe.Application.Mappings;
@@ -29,14 +29,32 @@ public class ColaboradorService : IColaboradorService
 
     public async Task<ColaboradorDto> AdicionarAsync(ColaboradorDto colaboradorDto, CancellationToken cancellationToken = default)
     {
+        if (await _colaboradorRepository.CpfJaExisteAsync(colaboradorDto.Cpf, colaboradorDto.Id == 0 ? null : colaboradorDto.Id, cancellationToken))
+            throw new ArgumentException("CPF já cadastrado.");
+        if (await _colaboradorRepository.EmailJaExisteAsync(colaboradorDto.Email ?? "", colaboradorDto.Id == 0 ? null : colaboradorDto.Id, cancellationToken))
+            throw new ArgumentException("E-mail já cadastrado.");
         var entity = colaboradorDto.ToEntity();
+        var hash = await Task.Run(() => AcademiaDoZe.Application.Security.PasswordHasher.Hash(colaboradorDto.Senha!), cancellationToken);
+        entity = colaboradorDto.ToEntity(hash);
         var resultado = await _colaboradorRepository.AdicionarAsync(entity, cancellationToken);
         return resultado.ToDTO();
     }
 
     public async Task<ColaboradorDto> AtualizarAsync(ColaboradorDto colaboradorDto, CancellationToken cancellationToken = default)
     {
-        var entity = colaboradorDto.ToEntity();
+        var existente = await _colaboradorRepository.ObterPorIdAsync(colaboradorDto.Id, cancellationToken)
+            ?? throw new KeyNotFoundException("Cadastro não encontrado.");
+        if (await _colaboradorRepository.CpfJaExisteAsync(colaboradorDto.Cpf, colaboradorDto.Id == 0 ? null : colaboradorDto.Id, cancellationToken))
+            throw new ArgumentException("CPF já cadastrado.");
+        if (await _colaboradorRepository.EmailJaExisteAsync(colaboradorDto.Email ?? "", colaboradorDto.Id == 0 ? null : colaboradorDto.Id, cancellationToken))
+            throw new ArgumentException("E-mail já cadastrado.");
+        var senha = existente.Senha.Valor;
+        if (!string.IsNullOrWhiteSpace(colaboradorDto.Senha))
+        {
+            if (colaboradorDto.Senha.Length < 6) throw new ArgumentException("Senha deve possuir pelo menos 6 caracteres.");
+            senha = await Task.Run(() => AcademiaDoZe.Application.Security.PasswordHasher.Hash(colaboradorDto.Senha), cancellationToken);
+        }
+        var entity = colaboradorDto.ToEntity(senha);
         var resultado = await _colaboradorRepository.AtualizarAsync(entity, cancellationToken);
         return resultado.ToDTO();
     }
@@ -82,6 +100,7 @@ public class ColaboradorService : IColaboradorService
 
     public async Task<bool> TrocarSenhaAsync(int id, string novaSenha, CancellationToken cancellationToken = default)
     {
-        return await _colaboradorRepository.TrocarSenhaAsync(id, novaSenha, cancellationToken);
+        if (string.IsNullOrWhiteSpace(novaSenha) || novaSenha.Length < 6) throw new ArgumentException("Senha deve possuir pelo menos 6 caracteres.");
+        return await _colaboradorRepository.TrocarSenhaAsync(id, AcademiaDoZe.Application.Security.PasswordHasher.Hash(novaSenha), cancellationToken);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Konscious.Security.Cryptography;
+using Konscious.Security.Cryptography;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -18,7 +18,7 @@ public static class PasswordHasher
             throw new ArgumentException("Password cannot be empty", nameof(password));
 
         byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
-        int p = Math.Max(1, Environment.ProcessorCount);
+        int p = Math.Clamp(Environment.ProcessorCount, 1, 4);
 
         using var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password))
         {

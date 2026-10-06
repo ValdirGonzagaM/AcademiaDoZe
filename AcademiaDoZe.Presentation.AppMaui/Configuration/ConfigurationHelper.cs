@@ -1,45 +1,27 @@
-﻿using AcademiaDoZe.Application;
+using AcademiaDoZe.Application;
 using AcademiaDoZe.Application.DependencyInjection;
-using AcademiaDoZe.Application.Enums;
-using AcademiaDoZe.Application.Mappings;
+using AcademiaDoZe.Domain.Enums;
+using AcademiaDoZe.Domain.Repositories;
+using AcademiaDoZe.Infrastructure;
+using AcademiaDoZe.Infrastructure.Repositories;
 
 namespace AcademiaDoZe.Presentation.AppMaui.Configuration;
-
 public static class ConfigurationHelper
 {
     public static void ConfigureServices(IServiceCollection services)
     {
-        var databaseType = AppDatabaseType.Sqlite;
-
-        string connectionString;
-        if (databaseType == AppDatabaseType.Sqlite)
+        var path = Path.Combine(FileSystem.AppDataDirectory, "db_academia_do_ze.db");
+        var connectionString = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder
         {
-            var dbPath = DeviceInfo.Platform == DevicePlatform.WinUI
-                ? @"C:\DEV\AcademiaDoZe\db_academia_do_ze.db"
-                : Path.Combine(FileSystem.AppDataDirectory, "db_academia_do_ze.db");
-
-            connectionString = $"Data Source={dbPath};Default Timeout=5;";
-        }
-        else
-        {
-            const string dbServer = "10.30.21.16";
-            const string dbDatabase = "db_academia_do_ze";
-            const string dbUser = "root";
-            const string dbPassword = "abcBolinhas12345";
-
-            string dbComplemento = databaseType == AppDatabaseType.SqlServer
-                ? "TrustServerCertificate=True;Encrypt=True;Connect Timeout=5;Connection Timeout=5;"
-                : "Connection Timeout=5;Default Command Timeout=30;";
-
-            connectionString = $"Server={dbServer};Database={dbDatabase};User Id={dbUser};Password={dbPassword};{dbComplemento}";
-        }
-
-        services.AddSingleton(new RepositoryConfig
-        {
-            ConnectionString = connectionString,
-            DatabaseType = databaseType.ToInfrastructure()
-        });
-
+            DataSource = path, ForeignKeys = true, DefaultTimeout = 5
+        }.ToString();
+        DatabaseInitializer.InitializeSqlite(connectionString);
+        services.AddSingleton(new RepositoryConfig { ConnectionString = connectionString, DatabaseType = DatabaseType.Sqlite });
+        services.AddTransient<IAlunoRepository>(_ => new AlunoRepository(connectionString, DatabaseType.Sqlite));
+        services.AddTransient<IColaboradorRepository>(_ => new ColaboradorRepository(connectionString, DatabaseType.Sqlite));
+        services.AddTransient<ILogradouroRepository>(_ => new LogradouroRepository(connectionString, DatabaseType.Sqlite));
+        services.AddTransient<Func<ILogradouroRepository>>(provider => () => provider.GetRequiredService<ILogradouroRepository>());
+        services.AddTransient<IMatriculaRepository>(_ => new MatriculaRepository(connectionString, DatabaseType.Sqlite));
         services.AddApplicationServices();
     }
 }
