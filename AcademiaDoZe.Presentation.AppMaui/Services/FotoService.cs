@@ -12,32 +12,23 @@ public sealed class FotoService
             if (status != PermissionStatus.Granted)
                 throw new InvalidOperationException("Autorize a câmera nas configurações do aplicativo para tirar a foto.");
         }
+        var windows = OperatingSystem.IsWindows();
         var options = new MediaPickerOptions
         {
             Title = camera ? "Tirar foto do cadastro" : "Selecionar foto da galeria",
             SelectionLimit = 1,
-            MaximumWidth = 1600,
-            MaximumHeight = 1600,
-            CompressionQuality = 85,
-            // No MAUI 10, preservar metadados no Windows pode devolver um stream
-            // já fechado. As fotos do cadastro precisam apenas dos dados da imagem.
+            // Evita por completo o ImageProcessor do MAUI no Windows: desativar
+            // apenas os metadados não evita todos os caminhos de stream fechado.
+            MaximumWidth = windows ? null : 1600,
+            MaximumHeight = windows ? null : 1600,
+            CompressionQuality = windows ? 100 : 85,
+            RotateImage = false,
             PreserveMetaData = false
         };
         var file = camera ? await MediaPicker.Default.CapturePhotoAsync(options)
             : (await MediaPicker.Default.PickPhotosAsync(options)).FirstOrDefault();
         if (file == null) return null; // Cancelar preserva a foto anterior.
-        await using var stream = await file.OpenReadAsync();
-        using var buffer = new MemoryStream();
-        var chunk = new byte[81920];
-        int read;
-        while ((read = await stream.ReadAsync(chunk)) > 0)
-        {
-            if (buffer.Length + read > 10 * 1024 * 1024)
-                throw new ArgumentException("Escolha uma foto de até 10 MB.");
-            await buffer.WriteAsync(chunk.AsMemory(0, read));
-        }
-        var bytes = buffer.ToArray();
-        if (bytes.Length == 0) throw new ArgumentException("A foto selecionada está vazia.");
-        return bytes;
+        // No Windows, reabre o arquivo original em vez de reutilizar o stream do picker.
+        return await FotoConteudo.LerAsync(windows ? file.FullPath : null, file.OpenReadAsync);
     }
 }

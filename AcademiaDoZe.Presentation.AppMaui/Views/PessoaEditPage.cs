@@ -120,7 +120,12 @@ public sealed class PessoaEditPage : ContentPage
         if (_ocupado) return;
         _ocupado = true; _form.IsEnabled = false; _erro.Text = "";
         try { await action(); }
-        catch (Exception ex) { _erro.Text = ex.Message; await DisplayAlertAsync("Atenção", ex.Message, "OK"); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[PessoaEditPage] {ex}");
+            _erro.Text = ex.Message;
+            await DisplayAlertAsync("Atenção", ex.Message, "OK");
+        }
         finally { _ocupado = false; _form.IsEnabled = true; }
     }
 }

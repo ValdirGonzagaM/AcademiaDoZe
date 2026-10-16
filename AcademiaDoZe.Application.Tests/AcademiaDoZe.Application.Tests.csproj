@@ -7,4 +7,5 @@
     <ProjectReference Include="../AcademiaDoZe.Application/AcademiaDoZe.Application.csproj" />
   </ItemGroup>
   <ItemGroup><Compile Include="../AcademiaDoZe.Presentation.AppMaui/Services/PessoaCadastro.cs" Link="PessoaCadastro.cs" /></ItemGroup>
+  <ItemGroup><Compile Include="../AcademiaDoZe.Presentation.AppMaui/Services/FotoConteudo.cs" Link="FotoConteudo.cs" /></ItemGroup>
 </Project>
