@@ -12,7 +12,17 @@ public sealed class FotoService
             if (status != PermissionStatus.Granted)
                 throw new InvalidOperationException("Autorize a câmera nas configurações do aplicativo para tirar a foto.");
         }
-        var options = new MediaPickerOptions { Title = camera ? "Tirar foto do cadastro" : "Selecionar foto da galeria", SelectionLimit = 1, MaximumWidth = 1600, MaximumHeight = 1600, CompressionQuality = 85 };
+        var options = new MediaPickerOptions
+        {
+            Title = camera ? "Tirar foto do cadastro" : "Selecionar foto da galeria",
+            SelectionLimit = 1,
+            MaximumWidth = 1600,
+            MaximumHeight = 1600,
+            CompressionQuality = 85,
+            // No MAUI 10, preservar metadados no Windows pode devolver um stream
+            // já fechado. As fotos do cadastro precisam apenas dos dados da imagem.
+            PreserveMetaData = false
+        };
         var file = camera ? await MediaPicker.Default.CapturePhotoAsync(options)
             : (await MediaPicker.Default.PickPhotosAsync(options)).FirstOrDefault();
         if (file == null) return null; // Cancelar preserva a foto anterior.
