@@ -16,7 +16,7 @@ public partial class LogradouroListPage : ContentPage
 
         if (BindingContext is LogradouroListViewModel viewModel)
         {
-            await viewModel.LoadLogradourosAsync();
+            await viewModel.SearchLogradourosAsync();
         }
     }
 }

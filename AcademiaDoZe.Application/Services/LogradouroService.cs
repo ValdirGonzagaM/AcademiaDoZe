@@ -1,4 +1,4 @@
-﻿using AcademiaDoZe.Application.DTOs;
+using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Interfaces;
 using AcademiaDoZe.Application.Mappings;
 using AcademiaDoZe.Domain.Repositories;
@@ -51,6 +51,13 @@ public class LogradouroService : ILogradouroService
         var logradouros = await _repoFactory().ObterTodos(cancellationToken);
         var logradouro = logradouros.FirstOrDefault(l => l.Cep.Valor == cepResult.Value!.Valor);
         return logradouro?.ToDto();
+    }
+
+    public async Task<IEnumerable<LogradouroDto>> ObterPorNomeAsync(string nome, CancellationToken cancellationToken = default)
+    {
+        var logradouros = await _repoFactory().ObterTodos(cancellationToken);
+        var filtro = nome?.Trim() ?? "";
+        return [.. logradouros.Where(l => l.Nome.Contains(filtro, StringComparison.OrdinalIgnoreCase)).Select(l => l.ToDto())];
     }
 
     public async Task<IEnumerable<LogradouroDto>> ObterPorCidadeAsync(string cidade, CancellationToken cancellationToken = default)

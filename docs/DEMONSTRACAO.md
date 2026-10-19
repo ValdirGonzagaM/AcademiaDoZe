@@ -2,7 +2,19 @@
 
 A aplicação usa SQLite no diretório privado do aplicativo. Não exige MySQL para os fluxos de aluno e colaborador. Cadastre primeiro um endereço em **Logradouros → Novo logradouro** (CEP, rua, bairro, cidade, UF e país).
 
-## Roteiro obrigatório
+## Roteiro de Dashboard e Logradouros (slide dev09de20)
+
+1. Mostre o funcionamento do menu e abra a **Dashboard**. Deixe visíveis a logo, o nome **Valdir Gonzaga**, o total de logradouros e o botão de acesso a Logradouros.
+2. Abra **Logradouros → Novo logradouro**. Preencha CEP, Nome / Rua, Bairro, Cidade, UF e País. No campo **Nome / Rua**, digite obrigatoriamente seu **nome completo** (por exemplo, **Valdir Gonzaga**). Use um CEP ainda não cadastrado. Salve e mostre a confirmação.
+3. Na listagem, mostre o registro salvo. Selecione o filtro **Nome**, informe o nome cadastrado e clique em **Buscar**. O filtro também aceita parte do nome; para CEP, informe os oito dígitos.
+4. Clique em **Editar** no registro encontrado. Altere **Bairro** para exatamente **Abc Bolinhas**, salve e mostre esse texto no cartão da listagem. O filtro permanece ao retornar da edição. Abra **Editar** novamente, se desejar mostrar os dados recuperados do banco, e depois cancele.
+5. Clique em **Excluir**, confirme em **Excluir** e mostre a confirmação e a lista sem o registro. Repita a busca para demonstrar que o registro saiu do banco. Volte à Dashboard para mostrar o total atualizado.
+
+Use neste ciclo um logradouro exclusivo para a demonstração, sem vínculo com alunos ou colaboradores. O aplicativo protege endereços em uso; nesse caso, altere o endereço dos cadastros vinculados antes de excluir. Para os ciclos de pessoas abaixo, cadastre outro endereço após concluir o vídeo de Logradouros.
+
+O slide também pede vídeo com boa qualidade: grave a própria tela, com texto legível e tempo para observar as confirmações e os resultados. A execução e a gravação no Windows devem ser verificadas no seu computador.
+
+## Roteiro de colaboradores e alunos
 
 Execute todo o ciclo de colaborador e depois todo o ciclo de aluno, sem cortes que escondam o salvamento ou o resultado da busca:
 
@@ -31,7 +43,7 @@ Use dados fictícios distintos: por exemplo, CPF `08615141908` no colaborador e 
 dotnet test AcademiaDoZe.Application.Tests/AcademiaDoZe.Application.Tests.csproj
 ```
 
-A suíte usa um SQLite temporário por teste e cobre os dois ciclos de CRUD, normalização do CPF na busca, persistência dos bytes de foto após reabrir o banco, endereço/complemento, senha preservada e armazenada com hash, filtros e rejeição de duplicatas/dados inválidos. Ela não substitui a execução de câmera, galeria e gravação na interface.
+A suíte usa um SQLite temporário por teste e cobre o ciclo completo de Logradouros (nome completo, filtro, edição para **Abc Bolinhas**, reabertura e exclusão), proteção de endereços vinculados, rejeição de CEP duplicado e os dois ciclos de CRUD de pessoas, normalização do CPF na busca, persistência dos bytes de foto após reabrir o banco, endereço/complemento, senha preservada e armazenada com hash, filtros e rejeição de duplicatas/dados inválidos. Ela não substitui a execução de câmera, galeria e gravação na interface.
 
 Os 174 testes de domínio passaram após corrigir as expectativas de `CpfTests`. A regra atual aceita 11 dígitos após normalização; ela não calcula os dígitos verificadores do CPF. Os testes MySQL preexistentes dependem de banco externo e não são necessários para o fluxo SQLite do aplicativo.
 

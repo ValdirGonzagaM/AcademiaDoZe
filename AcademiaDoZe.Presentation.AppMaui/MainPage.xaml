@@ -21,6 +21,7 @@
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Comece pelo endereço" FontAttributes="Bold" />
                     <Label Text="Cadastre um logradouro e depois vincule os alunos e colaboradores." />
+                    <Label x:Name="TotalLogradourosLabel" Text="Consultando total de logradouros…" />
                     <Button Text="Abrir logradouros" Clicked="OnLogradourosClicked" />
                 </VerticalStackLayout>
             </Border>

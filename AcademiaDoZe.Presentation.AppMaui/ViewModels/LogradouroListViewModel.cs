@@ -37,7 +37,6 @@ public partial class LogradouroListViewModel : ObservableObject
         try
         {
             IsBusy = true;
-            Logradouros.Clear();
 
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
             IEnumerable<LogradouroDto> resultados = Enumerable.Empty<LogradouroDto>();
@@ -48,8 +47,7 @@ public partial class LogradouroListViewModel : ObservableObject
             }
             else if (SelectedFilterType == "Nome")
             {
-                resultados = (await _logradouroService.ObterTodosAsync(cts.Token))
-                    .Where(l => l.Nome.Contains(SearchText.Trim(), StringComparison.OrdinalIgnoreCase));
+                resultados = await _logradouroService.ObterPorNomeAsync(SearchText, cts.Token);
             }
             else if (SelectedFilterType == "Cep")
             {
@@ -67,15 +65,21 @@ public partial class LogradouroListViewModel : ObservableObject
             {
                 resultados = await _logradouroService.ObterPorCidadeAsync(SearchText, cts.Token);
             }
-            else if (SelectedFilterType == "Id" && int.TryParse(SearchText, out int id))
+            else if (SelectedFilterType == "Id" && int.TryParse(SearchText, out int id) && id > 0)
             {
                 var logradouro = await _logradouroService.ObterPorIdAsync(id, cts.Token);
                 if (logradouro != null)
                     resultados = new[] { logradouro };
             }
+            else
+            {
+                await Shell.Current.DisplayAlertAsync("Validação", "Informe um ID numérico maior que zero.", "OK");
+                return;
+            }
 
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
+                Logradouros.Clear();
                 foreach (var logradouro in resultados)
                 {
                     Logradouros.Add(logradouro);
@@ -107,35 +111,36 @@ public partial class LogradouroListViewModel : ObservableObject
     [RelayCommand]
     private async Task AddLogradouroAsync()
     {
+        if (IsBusy) return;
         await Shell.Current.GoToAsync("logradouro");
     }
 
     [RelayCommand]
-    private async Task DeleteLogradouroAsync(LogradouroDto logradouro)
+    private async Task EditLogradouroAsync(LogradouroDto? logradouro)
     {
-        if (logradouro == null) return;
+        if (IsBusy || logradouro == null) return;
+        await Shell.Current.GoToAsync($"logradouro?id={logradouro.Id}");
+    }
 
-        bool confirm = await Shell.Current.DisplayAlertAsync("Confirmação", $"Deseja excluir '{logradouro.Nome}'?", "Sim", "Não");
-        if (!confirm) return;
-
+    [RelayCommand]
+    private async Task DeleteLogradouroAsync(LogradouroDto? logradouro)
+    {
+        if (IsBusy || logradouro == null) return;
+        IsBusy = true;
         try
         {
-            IsBusy = true;
+            bool confirm = await Shell.Current.DisplayAlertAsync("Confirmação", $"Deseja excluir '{logradouro.Nome}'?", "Excluir", "Cancelar");
+            if (!confirm) return;
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-
-            // Usando RemoverAsync que existe na sua interface
-            await _logradouroService.RemoverAsync(logradouro.Id, cts.Token);
-
-            await MainThread.InvokeOnMainThreadAsync(() => Logradouros.Remove(logradouro));
+            if (!await _logradouroService.RemoverAsync(logradouro.Id, cts.Token))
+                throw new KeyNotFoundException("O logradouro não foi encontrado. Atualize a busca.");
+            Logradouros.Remove(logradouro);
             await Shell.Current.DisplayAlertAsync("Sucesso", "Logradouro excluído!", "OK");
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlertAsync("Erro", $"Erro ao excluir: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlertAsync("Atenção", ex.Message, "OK");
         }
-        finally
-        {
-            IsBusy = false;
-        }
+        finally { IsBusy = false; }
     }
 }

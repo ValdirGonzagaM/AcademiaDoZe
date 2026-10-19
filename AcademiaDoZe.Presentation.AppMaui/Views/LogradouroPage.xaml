@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
- x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroPage" Title="Novo logradouro">
- <ScrollView><VerticalStackLayout Padding="24" Spacing="12">
-  <Label Text="Endereço da pessoa" FontSize="24" FontAttributes="Bold" />
+ x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroPage" Title="{Binding Titulo}">
+ <ScrollView><VerticalStackLayout Padding="24" Spacing="12" IsEnabled="{Binding IsNotBusy}">
+  <Label Text="{Binding Titulo}" FontSize="24" FontAttributes="Bold" />
+  <Label Text="CEP" FontAttributes="Bold" />
   <Entry Placeholder="CEP (8 dígitos)" Keyboard="Numeric" Text="{Binding Logradouro.Cep}" />
-  <Entry Placeholder="Nome da rua" Text="{Binding Logradouro.Nome}" />
-  <Entry Placeholder="Bairro" Text="{Binding Logradouro.Bairro}" />
+  <Label Text="Nome / Rua" FontAttributes="Bold" />
+  <Entry Placeholder="Nome / Rua" AutomationId="NomeLogradouro" Text="{Binding Logradouro.Nome}" />
+  <Label Text="Bairro" FontAttributes="Bold" />
+  <Entry Placeholder="Bairro" AutomationId="BairroLogradouro" Text="{Binding Logradouro.Bairro}" />
+  <Label Text="Cidade" FontAttributes="Bold" />
   <Entry Placeholder="Cidade" Text="{Binding Logradouro.Cidade}" />
+  <Label Text="UF" FontAttributes="Bold" />
   <Entry Placeholder="UF (ex.: SC)" MaxLength="2" Text="{Binding Logradouro.Estado}" />
+  <Label Text="País" FontAttributes="Bold" />
   <Entry Placeholder="País (ex.: Brasil)" Text="{Binding Logradouro.Pais}" />
-  <Button Text="Salvar logradouro" Command="{Binding SaveCommand}" />
+  <Button AutomationId="SalvarLogradouro" Text="Salvar logradouro" Command="{Binding SaveCommand}" />
   <Button Text="Cancelar" Command="{Binding CancelCommand}" />
  </VerticalStackLayout></ScrollView>
 </ContentPage>

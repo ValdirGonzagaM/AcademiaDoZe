@@ -120,6 +120,11 @@ public class LogradouroRepository : BaseRepository, ILogradouroRepository
             command.AddParameter("@Id", id, DbType.Int32);
             return await command.ExecuteNonQueryAsync(cancellationToken) > 0;
         }
+        catch (Microsoft.Data.Sqlite.SqliteException ex) when (ex.SqliteExtendedErrorCode == 787)
+        {
+            throw new InfrastructureException("LOGRADOURO_EM_USO",
+                "Este logradouro está vinculado a um aluno ou colaborador. Altere o endereço desses cadastros antes de excluí-lo.", ex);
+        }
         catch (DbException ex)
         {
             throw new InfrastructureException("ERRO_REMOVER_LOGRADOURO", $"Erro ao remover logradouro {id}: {ex.Message}", ex);
