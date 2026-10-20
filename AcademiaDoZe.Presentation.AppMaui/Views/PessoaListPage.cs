@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using AcademiaDoZe.Application.DTOs;
+using AcademiaDoZe.Application.Enums;
 using AcademiaDoZe.Presentation.AppMaui.Services;
 
 namespace AcademiaDoZe.Presentation.AppMaui.Views;
@@ -20,12 +21,19 @@ public class PessoaListPage : ContentPage
     {
         _cadastro = cadastro; _fotos = fotos; _colaborador = colaborador;
         Title = colaborador ? "Colaboradores" : "Alunos";
+        _filtro.ItemsSource = colaborador ? new[] { "CPF", "Nome", "ID", "E-mail", "Tipo", "Vínculo" }
+            : new[] { "CPF", "Nome", "ID", "E-mail" };
+        _filtro.SelectedIndex = 0;
         var novo = new Button { Text = colaborador ? "+ Novo colaborador" : "+ Novo aluno", AutomationId = "NovoCadastro" };
         novo.Clicked += async (_, _) => await ExecutarAsync(() => Navigation.PushAsync(new PessoaEditPage(_cadastro, _fotos, _colaborador)));
         var buscar = new Button { Text = "Buscar", AutomationId = "FiltrarPessoa" };
         buscar.Clicked += async (_, _) => await CarregarAsync();
         _busca.SearchButtonPressed += async (_, _) => await CarregarAsync();
-        _filtro.SelectedIndexChanged += (_, _) => _busca.Placeholder = _filtro.SelectedIndex == 0 ? "Digite o CPF completo" : "Digite parte do nome";
+        _filtro.SelectedIndexChanged += (_, _) => _busca.Placeholder = (_filtro.SelectedItem as string) switch
+        {
+            "CPF" => "Digite o CPF completo", "ID" => "ID do cadastro", "E-mail" => "E-mail completo",
+            "Tipo" => "Administrador, Atendente ou Instrutor", "Vínculo" => "CLT ou Estagiário", _ => "Digite parte do nome"
+        };
         var lista = new CollectionView { ItemsSource = _pessoas, SelectionMode = SelectionMode.None, AutomationId = "ListaPessoas" };
         lista.ItemTemplate = new DataTemplate(() =>
         {
@@ -39,7 +47,12 @@ public class PessoaListPage : ContentPage
             editar.Clicked += async (_, _) =>
             {
                 if (editar.BindingContext is PessoaDto pessoa)
-                    await ExecutarAsync(() => Navigation.PushAsync(new PessoaEditPage(_cadastro, _fotos, _colaborador, pessoa)));
+                    await ExecutarAsync(async () =>
+                    {
+                        var atual = await _cadastro.PorIdAsync(_colaborador, pessoa.Id)
+                            ?? throw new KeyNotFoundException("Cadastro não encontrado. Atualize a busca.");
+                        await Navigation.PushAsync(new PessoaEditPage(_cadastro, _fotos, _colaborador, atual));
+                    });
             };
             excluir.Clicked += async (_, _) =>
             {
@@ -52,7 +65,12 @@ public class PessoaListPage : ContentPage
                     await DisplayAlertAsync("Cadastro excluído", "A exclusão foi concluída.", "OK");
                 });
             };
-            var detalhes = new VerticalStackLayout { Spacing = 5, Children = { nome, cpf } };
+            var identificacao = new Label { FontSize = 12 };
+            identificacao.SetBinding(Label.TextProperty, nameof(PessoaDto.Id), stringFormat: "ID: {0}");
+            var email = new Label { FontSize = 14 };
+            email.SetBinding(Label.TextProperty, nameof(PessoaDto.Email));
+            var profissional = new Label { FontSize = 13, IsVisible = _colaborador };
+            var detalhes = new VerticalStackLayout { Spacing = 5, Children = { identificacao, nome, cpf, email, profissional } };
             var grid = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }, ColumnSpacing = 12 };
             grid.Add(foto, 0); grid.Add(detalhes, 1);
             var card = new Border
@@ -62,19 +80,21 @@ public class PessoaListPage : ContentPage
             };
             card.BindingContextChanged += (_, _) =>
             {
+                profissional.Text = card.BindingContext is ColaboradorDto c
+                    ? $"{c.Tipo.GetDisplayName()} · {c.Vinculo.GetDisplayName()} · Admissão: {c.DataAdmissao:dd/MM/yyyy}" : "";
                 var bytes = (card.BindingContext as PessoaDto)?.Foto?.Conteudo;
                 foto.Source = bytes is { Length: > 0 } ? ImageSource.FromStream(() => new MemoryStream(bytes)) : "logo_aluno.png";
             };
             return card;
         });
         var header = new VerticalStackLayout { Spacing = 10, Children = { new Label { Text = "PESSOAS · ACADEMIA DO ZÉ", FontSize = 12, TextColor = Color.FromArgb("#147D73") }, novo, _filtro, _busca, buscar, _atividade, _status } };
-        var layout = new Grid { Padding = 20, RowSpacing = 10, RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Star) } };
+        var layout = new Grid { MaximumWidthRequest = 1000, HorizontalOptions = LayoutOptions.Fill, Padding = DeviceInfo.Idiom == DeviceIdiom.Phone ? 16 : 28, RowSpacing = 10, RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Star) } };
         layout.Add(header, 0, 0); layout.Add(lista, 0, 1); Content = layout;
     }
     protected override async void OnAppearing() { base.OnAppearing(); await CarregarAsync(); }
     private async Task CarregarAsync() => await ExecutarAsync(async () =>
     {
-        var pessoas = await _cadastro.BuscarAsync(_colaborador, _filtro.SelectedIndex == 0 ? "CPF" : "Nome", _busca.Text ?? "");
+        var pessoas = await _cadastro.BuscarAsync(_colaborador, _filtro.SelectedItem as string ?? "CPF", _busca.Text ?? "");
         _pessoas.Clear(); foreach (var pessoa in pessoas) _pessoas.Add(pessoa);
         AtualizarStatus();
     });

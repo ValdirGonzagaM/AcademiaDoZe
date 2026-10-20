@@ -20,6 +20,14 @@ public abstract class PessoaRepository<T> : BaseRepository where T : Pessoa
         _id = "id_" + kind;
     }
 
+    public async Task<int> ContarAsync(CancellationToken cancellationToken = default)
+    {
+        await using var connection = await OpenConnectionAsync(cancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = $"SELECT COUNT(*) FROM {_table}";
+        return Convert.ToInt32(await command.ExecuteScalarAsync(cancellationToken));
+    }
+
     protected abstract T Create(int id, string nome, string cpf, DateOnly nascimento,
         string telefone, string email, Logradouro logradouro, string numero,
         string complemento, string senha, Arquivo foto, DbDataReader reader);

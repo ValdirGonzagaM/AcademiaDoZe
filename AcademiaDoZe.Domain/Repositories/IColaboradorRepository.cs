@@ -1,10 +1,11 @@
-﻿using AcademiaDoZe.Domain.Entities;
+using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Domain.Enums;
 
 namespace AcademiaDoZe.Domain.Repositories;
 
 public interface IColaboradorRepository
 {
+    Task<int> ContarAsync(CancellationToken cancellationToken = default);
     Task<Colaborador?> ObterPorIdAsync(int id, CancellationToken cancellationToken = default);
     Task<IEnumerable<Colaborador>> ObterTodosAsync(CancellationToken cancellationToken = default);
     Task<Colaborador> AdicionarAsync(Colaborador entity, CancellationToken cancellationToken = default);

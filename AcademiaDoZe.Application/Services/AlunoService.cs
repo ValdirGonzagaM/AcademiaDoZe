@@ -15,6 +15,8 @@ public class AlunoService : IAlunoService
         _alunoRepository = alunoRepository ?? throw new ArgumentNullException(nameof(alunoRepository));
     }
 
+    public Task<int> ContarAsync(CancellationToken cancellationToken = default) => _alunoRepository.ContarAsync(cancellationToken);
+
     public async Task<AlunoDto?> ObterPorIdAsync(int id, CancellationToken cancellationToken = default)
     {
         var aluno = await _alunoRepository.ObterPorIdAsync(id, cancellationToken);

@@ -15,6 +15,8 @@ public class ColaboradorService : IColaboradorService
         _colaboradorRepository = colaboradorRepository ?? throw new ArgumentNullException(nameof(colaboradorRepository));
     }
 
+    public Task<int> ContarAsync(CancellationToken cancellationToken = default) => _colaboradorRepository.ContarAsync(cancellationToken);
+
     public async Task<ColaboradorDto?> ObterPorIdAsync(int id, CancellationToken cancellationToken = default)
     {
         var colaborador = await _colaboradorRepository.ObterPorIdAsync(id, cancellationToken);

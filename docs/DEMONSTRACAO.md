@@ -14,20 +14,35 @@ Use neste ciclo um logradouro exclusivo para a demonstração, sem vínculo com 
 
 O slide também pede vídeo com boa qualidade: grave a própria tela, com texto legível e tempo para observar as confirmações e os resultados. A execução e a gravação no Windows devem ser verificadas no seu computador.
 
+## Colaboradores conforme o slide dev11de20
+
+Acesse **Colaboradores** no menu ou na Dashboard. Preencha os dados pessoais, a foto, o endereço, a data de admissão, o tipo e o vínculo.
+
+- **Listagem:** foto, ID, nome, CPF, e-mail e, para colaborador, tipo, vínculo e admissão. Use os botões **Editar** e **Excluir** do cartão.
+- **Filtros:** CPF completo, parte do nome, ID, e-mail, tipo (Administrador, Atendente, Instrutor) ou vínculo (CLT, Estagiário). A busca de nomes e enums aceita diferenças de maiúsculas e acentos. Deixe o texto vazio para listar todos.
+- **Buscar CPF no formulário:** informe os 11 dígitos e clique em **Buscar CPF**. Se houver cadastro, confirme **Carregar** para abrir os dados para edição. Isso substitui os campos e a foto atuais, sem criar outro registro. Senha e confirmação permanecem vazias. Se o CPF não existir, preencha um novo cadastro.
+- **Buscar CEP:** informe os oito dígitos de um logradouro já cadastrado e clique em **Buscar CEP**. A tela seleciona o endereço e mostra rua, bairro, cidade, UF e país. Preencha número e complemento. Também é possível selecionar o logradouro diretamente.
+- **Senha:** no cadastro, preencha senha e confirmação iguais, com pelo menos seis caracteres. Na edição, deixe ambos vazios para manter a senha existente ou informe e confirme uma nova senha.
+- **Foto:** use **Tirar foto** ou **Galeria**. Cancelar a escolha preserva a imagem anterior. A correção que evita o processamento de streams fechados no Windows permanece ativa.
+- **Tipo e vínculo:** os seletores exibem suas descrições, incluindo **Estagiário**. O domínio exige vínculo CLT para Administrador. Datas de nascimento e admissão são convertidas entre os seletores de data e DateOnly.
+- **Dashboard:** totais reais de colaboradores e alunos são consultados sem carregar as fotos e atualizados quando a tela reaparece. A logo e a identificação Valdir Gonzaga permanecem.
+
+As telas usam espaçamentos menores no celular e limitam a largura dos formulários/listas em telas grandes. Valide a execução visual e a câmera no dispositivo usado para gravar.
+
 ## Roteiro de colaboradores e alunos
 
 Execute todo o ciclo de colaborador e depois todo o ciclo de aluno, sem cortes que escondam o salvamento ou o resultado da busca:
 
 | Etapa | Colaborador | Aluno |
 |---|---|---|
-| Cadastro | Novo colaborador, preencher dados, selecionar endereço, informar senha, tipo e vínculo | Novo aluno, preencher dados, selecionar endereço e informar senha |
+| Cadastro | Novo colaborador, preencher dados, buscar/selecionar endereço, informar senha e confirmação, tipo e vínculo | Novo aluno, preencher dados, buscar/selecionar endereço e informar senha e confirmação |
 | Câmera | Tocar **Tirar foto**, autorizar a câmera, capturar, confirmar a foto e salvar | Repetir pela câmera |
 | Busca | Na listagem, selecionar **CPF**, digitar o CPF completo e tocar **Buscar** | Repetir com o CPF do aluno |
 | Edição | Tocar **Editar**, mudar o nome para **zé dos testes**, tocar **Galeria**, escolher uma foto diferente e salvar | Repetir no aluno |
 | Verificação | Buscar novamente pelo CPF, mostrar nome e foto novos; abrir o cadastro para mostrar a foto maior | Repetir no aluno |
 | Exclusão | Tocar **Excluir**, confirmar e mostrar a listagem sem o registro | Repetir no aluno |
 
-Use dados fictícios distintos: por exemplo, CPF `08615141908` no colaborador e `52998224725` no aluno; e-mails diferentes e senha com pelo menos seis caracteres. Para colaborador Administrador, use vínculo CLT. A senha pode ficar em branco na edição para manter a atual. Cancelar câmera/galeria mantém a foto anterior.
+Use dados fictícios distintos: por exemplo, CPF `08615141908` no colaborador e `52998224725` no aluno; e-mails diferentes e senha com pelo menos seis caracteres. Para colaborador Administrador, use vínculo CLT. A senha e sua confirmação podem ficar em branco na edição para manter a atual. Cancelar câmera/galeria mantém a foto anterior.
 
 ## Gravação no emulador
 
@@ -43,7 +58,7 @@ Use dados fictícios distintos: por exemplo, CPF `08615141908` no colaborador e 
 dotnet test AcademiaDoZe.Application.Tests/AcademiaDoZe.Application.Tests.csproj
 ```
 
-A suíte usa um SQLite temporário por teste e cobre o ciclo completo de Logradouros (nome completo, filtro, edição para **Abc Bolinhas**, reabertura e exclusão), proteção de endereços vinculados, rejeição de CEP duplicado e os dois ciclos de CRUD de pessoas, normalização do CPF na busca, persistência dos bytes de foto após reabrir o banco, endereço/complemento, senha preservada e armazenada com hash, filtros e rejeição de duplicatas/dados inválidos. Ela não substitui a execução de câmera, galeria e gravação na interface.
+A suíte usa um SQLite temporário por teste e cobre o ciclo completo de Logradouros (nome completo, filtro, edição para **Abc Bolinhas**, reabertura e exclusão), proteção de endereços vinculados, rejeição de CEP duplicado e os dois ciclos de CRUD de pessoas, normalização do CPF na busca, persistência dos bytes de foto após reabrir o banco, endereço/complemento, senha preservada e armazenada com hash, filtros (CPF, nome, ID, e-mail, tipo e vínculo), buscas de CPF/CEP do formulário, confirmação de senha, contagens sem fotos e rejeição de duplicatas/dados inválidos. Ela não substitui a execução de câmera, galeria e gravação na interface.
 
 Os 174 testes de domínio passaram após corrigir as expectativas de `CpfTests`. A regra atual aceita 11 dígitos após normalização; ela não calcula os dígitos verificadores do CPF. Os testes MySQL preexistentes dependem de banco externo e não são necessários para o fluxo SQLite do aplicativo.
 

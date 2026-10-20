@@ -1,10 +1,11 @@
-﻿using AcademiaDoZe.Application.DTOs;
+using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Enums;
 
 namespace AcademiaDoZe.Application.Interfaces;
 
 public interface IColaboradorService
 {
+    Task<int> ContarAsync(CancellationToken cancellationToken = default);
     Task<ColaboradorDto?> ObterPorIdAsync(int id, CancellationToken cancellationToken = default);
     Task<IEnumerable<ColaboradorDto>> ObterTodosAsync(CancellationToken cancellationToken = default);
     Task<ColaboradorDto> AdicionarAsync(ColaboradorDto colaboradorDto, CancellationToken cancellationToken = default);

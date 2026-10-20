@@ -1,9 +1,10 @@
-﻿using AcademiaDoZe.Application.DTOs;
+using AcademiaDoZe.Application.DTOs;
 
 namespace AcademiaDoZe.Application.Interfaces;
 
 public interface IAlunoService
 {
+    Task<int> ContarAsync(CancellationToken cancellationToken = default);
     Task<AlunoDto?> ObterPorIdAsync(int id, CancellationToken cancellationToken = default);
     Task<IEnumerable<AlunoDto>> ObterTodosAsync(CancellationToken cancellationToken = default);
     Task<AlunoDto> AdicionarAsync(AlunoDto alunoDto, CancellationToken cancellationToken = default);

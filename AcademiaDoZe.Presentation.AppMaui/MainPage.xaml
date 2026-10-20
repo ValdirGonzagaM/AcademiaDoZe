@@ -15,7 +15,9 @@
             </Border>
             <Label Text="Sua academia, mais próxima das pessoas." FontSize="22" FontAttributes="Bold" />
             <Label Text="Gerencie a equipe e os alunos com cadastros completos e fotos." />
+            <Label x:Name="TotalColaboradoresLabel" Text="Consultando colaboradores…" />
             <Button Text="Gerenciar colaboradores →" Clicked="OnColaboradoresClicked" />
+            <Label x:Name="TotalAlunosLabel" Text="Consultando alunos…" />
             <Button Text="Gerenciar alunos →" Clicked="OnAlunosClicked" />
             <Border Padding="16" StrokeShape="RoundRectangle 16">
                 <VerticalStackLayout Spacing="8">

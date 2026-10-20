@@ -125,4 +125,77 @@ public sealed class PessoaCrudTests : IDisposable
         Assert.Empty(await cadastro.BuscarAsync(colaborador, "CPF", dto.Cpf));
     }
 
+    [Fact]
+    public async Task Colaborador_FiltrosDoSlide_Contagem_E_BuscasDoFormulario()
+    {
+        var endereco = await EnderecoAsync();
+        var alunos = new AlunoService(new AlunoRepository(Connection, DatabaseType.Sqlite));
+        var colaboradores = new ColaboradorService(new ColaboradorRepository(Connection, DatabaseType.Sqlite));
+        var cadastro = new AcademiaDoZe.Presentation.AppMaui.Services.PessoaCadastro(alunos, colaboradores,
+            new LogradouroService(() => new LogradouroRepository(Connection, DatabaseType.Sqlite)));
+        Assert.Equal(0, await colaboradores.ContarAsync());
+        var primeiro = (ColaboradorDto)Pessoa(true, endereco);
+        primeiro.Nome = "José da Equipe";
+        var salvo = await cadastro.SalvarAsync(primeiro);
+        var segundo = (ColaboradorDto)Pessoa(true, endereco);
+        segundo.Cpf = "52998224725"; segundo.Email = "instrutor@teste.com";
+        segundo.Tipo = AppColaboradorTipo.Instrutor; segundo.Vinculo = AppColaboradorVinculo.Estagio;
+        var instrutor = await cadastro.SalvarAsync(segundo);
+        Assert.Equal(2, await colaboradores.ContarAsync());
+        Assert.Equal(0, await alunos.ContarAsync());
+        foreach (var busca in new[] { ("CPF", "086.151.419-08"), ("ID", salvo.Id.ToString()),
+                     ("E-mail", " PESSOA@TESTE.COM "), ("Nome", "jose da equipe"), ("Tipo", "atendente"), ("Vínculo", "clt") })
+            Assert.Equal(salvo.Id, Assert.Single(await cadastro.BuscarAsync(true, busca.Item1, busca.Item2)).Id);
+        foreach (var termo in new[] { "Estagiário", "estagiario", "Estágio", "estagio" })
+            Assert.Equal(instrutor.Id, Assert.Single(await cadastro.BuscarAsync(true, "Vínculo", termo)).Id);
+        Assert.Equal(instrutor.Id, Assert.Single(await cadastro.BuscarAsync(true, "Tipo", "instrutor")).Id);
+        Assert.Empty(await cadastro.BuscarAsync(true, "Tipo", "administrador"));
+        Assert.Equal("Estagiário", AppColaboradorVinculo.Estagio.GetDisplayName());
+        var porCpf = Assert.IsType<ColaboradorDto>(await cadastro.PorCpfAsync(true, primeiro.Cpf));
+        Assert.Null(porCpf.Senha);
+        Assert.Equal(primeiro.Foto!.Conteudo, porCpf.Foto!.Conteudo);
+        Assert.Equal(endereco.Id, porCpf.Endereco!.Id);
+        var porCep = await cadastro.PorCepAsync("88501-000");
+        Assert.NotNull(porCep);
+        Assert.Equal(endereco.Id, porCep.Id); Assert.Equal(endereco.Bairro, porCep.Bairro);
+        Assert.Null(await cadastro.PorCepAsync("99999000"));
+        Assert.Null(await cadastro.PorCpfAsync(true, "12345678901"));
+        await Assert.ThrowsAsync<ArgumentException>(() => cadastro.PorCepAsync("123"));
+        foreach (var busca in new[] { ("ID", "-1"), ("Tipo", "inexistente"), ("Vínculo", "inexistente"), ("Outro", "valor") })
+            await Assert.ThrowsAsync<ArgumentException>(() => cadastro.BuscarAsync(true, busca.Item1, busca.Item2));
+        var edicao = Assert.IsType<ColaboradorDto>(await cadastro.PorIdAsync(true, instrutor.Id));
+        edicao.Tipo = AppColaboradorTipo.Atendente;
+        edicao.Vinculo = AppColaboradorVinculo.CLT;
+        edicao.DataAdmissao = new DateOnly(2024, 3, 1);
+        await cadastro.SalvarAsync(edicao);
+        var reaberto = Assert.IsType<ColaboradorDto>(await cadastro.PorIdAsync(true, instrutor.Id));
+        Assert.Equal(AppColaboradorTipo.Atendente, reaberto.Tipo);
+        Assert.Equal(AppColaboradorVinculo.CLT, reaberto.Vinculo);
+        Assert.Equal(new DateOnly(2024, 3, 1), reaberto.DataAdmissao);
+        Assert.Empty(await cadastro.BuscarAsync(true, "Tipo", "instrutor"));
+        Assert.Empty(await cadastro.BuscarAsync(true, "Vínculo", "estagiário"));
+        Assert.Equal(2, (await cadastro.BuscarAsync(true, "Tipo", "atendente")).Count);
+        Assert.True(await cadastro.ExcluirAsync(instrutor));
+        Assert.Equal(1, await colaboradores.ContarAsync());
+        Assert.True(await cadastro.ExcluirAsync(salvo));
+        Assert.Equal(0, await colaboradores.ContarAsync());
+    }
+
+    [Theory]
+    [InlineData("Teste123!", "Teste123!", false, true)]
+    [InlineData("Teste123!", "Diferente123!", false, false)]
+    [InlineData("", "", false, false)]
+    [InlineData("123", "123", false, false)]
+    [InlineData("", "", true, true)]
+    [InlineData(null, null, true, true)]
+    [InlineData("", "Teste123!", true, false)]
+    [InlineData("Teste123!", "", true, false)]
+    [InlineData("Teste123!", "Teste123!", true, true)]
+    public void ConfirmacaoSenha_ProtegeCadastro_E_PermiteManterSenhaNaEdicao(string? senha, string? confirmacao, bool editando, bool valido)
+    {
+        void Validar() => AcademiaDoZe.Presentation.AppMaui.Services.PessoaCadastro.ValidarConfirmacaoSenha(senha, confirmacao, editando);
+        if (valido) Validar();
+        else Assert.Throws<ArgumentException>(Validar);
+    }
+
 }

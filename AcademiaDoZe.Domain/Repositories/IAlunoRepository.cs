@@ -1,9 +1,10 @@
-﻿using AcademiaDoZe.Domain.Entities;
+using AcademiaDoZe.Domain.Entities;
 
 namespace AcademiaDoZe.Domain.Repositories;
 
 public interface IAlunoRepository
 {
+    Task<int> ContarAsync(CancellationToken cancellationToken = default);
     Task<Aluno?> ObterPorIdAsync(int id, CancellationToken cancellationToken = default);
     Task<IEnumerable<Aluno>> ObterTodosAsync(CancellationToken cancellationToken = default);
     Task<Aluno> AdicionarAsync(Aluno entity, CancellationToken cancellationToken = default);
