@@ -121,7 +121,11 @@ public abstract class PessoaRepository<T> : BaseRepository where T : Pessoa
         await using var command = connection.CreateCommand();
         command.CommandText = $"DELETE FROM {_table} WHERE {_id} = @Id";
         command.AddParameter("@Id", id, DbType.Int32);
-        return await command.ExecuteNonQueryAsync(cancellationToken) > 0;
+        try { return await command.ExecuteNonQueryAsync(cancellationToken) > 0; }
+        catch (Microsoft.Data.Sqlite.SqliteException ex) when (ex.SqliteExtendedErrorCode == 787)
+        {
+            throw new InvalidOperationException("O cadastro possui registros vinculados, como matrículas. Remova os vínculos antes de excluí-lo.", ex);
+        }
     }
 
     public async Task<bool> TrocarSenhaAsync(int id, string novaSenha, CancellationToken cancellationToken = default)

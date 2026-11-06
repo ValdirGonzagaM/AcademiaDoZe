@@ -22,7 +22,7 @@ public sealed class LogradouroCrudTests : IDisposable
     };
 
     [Fact]
-    public async Task CicloDoVideo_Cadastra_Filtra_EditaBairro_Reabre_E_Exclui()
+    public async Task Cadastro_Filtro_Edicao_Persistencia_E_Exclusao()
     {
         var salvo = await Service().AdicionarAsync(Novo());
         Assert.True(salvo.Id > 0);

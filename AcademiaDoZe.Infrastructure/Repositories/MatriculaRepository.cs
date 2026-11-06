@@ -101,269 +101,119 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
             numero: numero,
             complemento: complemento ?? string.Empty,
             senha: senha,
-            foto: foto
+            foto: foto!
         ).Value!;
     }
 
-    public async Task<Matricula?> ObterPorId(int id, CancellationToken cancellationToken = default)
+    private async Task<List<Matricula>> ConsultarAsync(string filtro, Action<DbCommand>? parametros, string ordem,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            string query = $"{BaseSelectQuery} WHERE m.id_matricula = @Id";
-            await using var connection = await OpenConnectionAsync(cancellationToken);
-            await using var command = connection.CreateCommand();
-            command.CommandText = query;
-            command.AddParameter("@Id", id, DbType.Int32);
-            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-            return await reader.ReadAsync(cancellationToken) ? Map(reader) : null;
-        }
-        catch (DbException ex)
-        {
-            throw new InfrastructureException("ERRO_OBTER_POR_ID", $"Erro ao obter matrícula por ID {id}: {ex.Message}", ex);
-        }
+        await using var connection = await OpenConnectionAsync(cancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = $"{BaseSelectQuery} WHERE {filtro} ORDER BY {ordem}";
+        parametros?.Invoke(command);
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        var lista = new List<Matricula>();
+        while (await reader.ReadAsync(cancellationToken)) lista.Add(Map(reader));
+        return lista;
     }
+    private static void Hoje(DbCommand command) => command.AddParameter("@Hoje", DateOnly.FromDateTime(DateTime.Today), DbType.Date);
 
-    public async Task<IEnumerable<Matricula>> ObterTodos(CancellationToken cancellationToken = default)
+    public async Task<int> Contar(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            string query = $"{BaseSelectQuery} ORDER BY m.data_inicio DESC";
-            await using var connection = await OpenConnectionAsync(cancellationToken);
-            await using var command = connection.CreateCommand();
-            command.CommandText = query;
-            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-            var matriculas = new List<Matricula>();
-            while (await reader.ReadAsync(cancellationToken))
-            {
-                matriculas.Add(Map(reader));
-            }
-            return matriculas;
-        }
-        catch (DbException ex)
-        {
-            throw new InfrastructureException("ERRO_OBTER_TODOS", $"Erro ao obter todas as matrículas: {ex.Message}", ex);
-        }
+        await using var connection = await OpenConnectionAsync(cancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT COUNT(*) FROM tb_matricula";
+        return Convert.ToInt32(await command.ExecuteScalarAsync(cancellationToken));
     }
-
-    public async Task<Matricula> Adicionar(Matricula entity, CancellationToken cancellationToken = default)
-    {
-        try
+    public async Task<Matricula?> ObterPorId(int id, CancellationToken cancellationToken = default) =>
+        (await ConsultarAsync("m.id_matricula = @Id", c => c.AddParameter("@Id", id, DbType.Int32), "m.id_matricula", cancellationToken)).FirstOrDefault();
+    public async Task<IEnumerable<Matricula>> ObterTodos(CancellationToken cancellationToken = default) =>
+        await ConsultarAsync("1=1", null, "m.data_inicio DESC, m.id_matricula DESC", cancellationToken);
+    public async Task<IEnumerable<Matricula>> ObterPorAluno(int alunoId, CancellationToken cancellationToken = default) =>
+        await ConsultarAsync("m.aluno_id = @Aluno", c => c.AddParameter("@Aluno", alunoId, DbType.Int32), "m.data_inicio DESC", cancellationToken);
+    public async Task<Matricula?> ObterMatriculaAtivaPorAluno(int alunoId, CancellationToken cancellationToken = default) =>
+        (await ObterAtivas(alunoId, cancellationToken)).OrderByDescending(m => m.DataFim).FirstOrDefault();
+    public async Task<bool> PossuiMatriculaAtiva(int alunoId, CancellationToken cancellationToken = default) =>
+        await ObterMatriculaAtivaPorAluno(alunoId, cancellationToken) != null;
+    public async Task<IEnumerable<Matricula>> ObterAtivas(int alunoId = 0, CancellationToken cancellationToken = default) =>
+        await ConsultarAsync("m.data_fim >= @Hoje" + (alunoId > 0 ? " AND m.aluno_id = @Aluno" : ""), c =>
         {
-            string query = FormatInsertQuery(@"INSERT INTO tb_matricula 
-                (aluno_id, plano, data_inicio, data_fim, objetivo, restricao_medica, obs_restricao, laudo_medico) 
-                VALUES (@AlunoId, @Plano, @DataInicio, @DataFim, @Objetivo, @RestricaoMedica, @ObsRestricao, @LaudoMedico)");
-
-            await using var connection = await OpenConnectionAsync(cancellationToken);
-            await using var command = connection.CreateCommand();
-            command.CommandText = query;
-            command.AddParameter("@AlunoId", entity.AlunoMatricula.Id, DbType.Int32);
-            command.AddParameter("@Plano", (int)entity.Plano, DbType.Int32);
-            command.AddParameter("@DataInicio", entity.DataInicio, DbType.Date);
-            command.AddParameter("@DataFim", entity.DataFim, DbType.Date);
-            command.AddParameter("@Objetivo", entity.Objetivo, DbType.String);
-            command.AddParameter("@RestricaoMedica", (int)entity.RestricoesMedicas, DbType.Int32);
-            command.AddParameter("@ObsRestricao", (object?)entity.ObservacoesRestricoes ?? DBNull.Value, DbType.String);
-            command.AddParameter("@LaudoMedico", (object?)entity.LaudoMedico?.Url ?? DBNull.Value, DbType.String);
-
-            int id = await command.ExecuteScalarIdAsync("ERRO_ADICIONAR_MATRICULA", "Falha ao obter ID inserido para a matricula.", cancellationToken);
-
-            var type = entity.GetType();
-            var idProperty = type.GetProperty("Id") ?? type.BaseType?.GetProperty("Id");
-            if (idProperty != null && idProperty.CanWrite)
-            {
-                idProperty.SetValue(entity, id);
-            }
-            else
-            {
-                var field = type.GetField("<Id>k__BackingField", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                           ?? type.BaseType?.GetField("<Id>k__BackingField", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                field?.SetValue(entity, id);
-            }
-
-            return entity;
-        }
-        catch (DbException ex)
-        {
-            throw new InfrastructureException("ERRO_ADICIONAR_MATRICULA", $"Erro ao adicionar matrícula para o aluno ID {entity.AlunoMatricula.Id}: {ex.Message}", ex);
-        }
-    }
-
-    public async Task<Matricula> Atualizar(Matricula entity, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            string query = @"UPDATE tb_matricula SET 
-                aluno_id = @AlunoId, 
-                plano = @Plano, 
-                data_inicio = @DataInicio, 
-                data_fim = @DataFim, 
-                objetivo = @Objetivo, 
-                restricao_medica = @RestricaoMedica, 
-                obs_restricao = @ObsRestricao, 
-                laudo_medico = @LaudoMedico 
-                WHERE id_matricula = @Id";
-
-            await using var connection = await OpenConnectionAsync(cancellationToken);
-            await using var command = connection.CreateCommand();
-            command.CommandText = query;
-            command.AddParameter("@Id", entity.Id, DbType.Int32);
-            command.AddParameter("@AlunoId", entity.AlunoMatricula.Id, DbType.Int32);
-            command.AddParameter("@Plano", (int)entity.Plano, DbType.Int32);
-            command.AddParameter("@DataInicio", entity.DataInicio, DbType.Date);
-            command.AddParameter("@DataFim", entity.DataFim, DbType.Date);
-            command.AddParameter("@Objetivo", entity.Objetivo, DbType.String);
-            command.AddParameter("@RestricaoMedica", (int)entity.RestricoesMedicas, DbType.Int32);
-            command.AddParameter("@ObsRestricao", (object?)entity.ObservacoesRestricoes ?? DBNull.Value, DbType.String);
-            command.AddParameter("@LaudoMedico", (object?)entity.LaudoMedico?.Url ?? DBNull.Value, DbType.String);
-
-            int rowsAffected = await command.ExecuteNonQueryAsync(cancellationToken);
-            if (rowsAffected == 0)
-            {
-                throw new InfrastructureException("REGISTRO_NAO_ENCONTRADO", $"Nenhuma matricula encontrada com o ID {entity.Id} para atualização.");
-            }
-
-            return entity;
-        }
-        catch (DbException ex)
-        {
-            throw new InfrastructureException("ERRO_ATUALIZAR_MATRICULA", $"Erro ao atualizar matrícula ID {entity.Id} do aluno ID {entity.AlunoMatricula.Id}: {ex.Message}", ex);
-        }
-    }
-
-    public async Task<bool> Remover(int id, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            string query = "DELETE FROM tb_matricula WHERE id_matricula = @Id";
-            await using var connection = await OpenConnectionAsync(cancellationToken);
-            await using var command = connection.CreateCommand();
-            command.CommandText = query;
-            command.AddParameter("@Id", id, DbType.Int32);
-            var result = await command.ExecuteNonQueryAsync(cancellationToken);
-            return result > 0;
-        }
-        catch (DbException ex)
-        {
-            throw new InfrastructureException("ERRO_REMOVER_MATRICULA", $"Erro ao remover matricula ID {id}: {ex.Message}", ex);
-        }
-    }
-
-    public async Task<IEnumerable<Matricula>> ObterPorAluno(int alunoId, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            string query = $"{BaseSelectQuery} WHERE m.aluno_id = @AlunoId ORDER BY m.data_inicio DESC";
-            await using var connection = await OpenConnectionAsync(cancellationToken);
-            await using var command = connection.CreateCommand();
-            command.CommandText = query;
-            command.AddParameter("@AlunoId", alunoId, DbType.Int32);
-            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-            var matriculas = new List<Matricula>();
-            while (await reader.ReadAsync(cancellationToken))
-            {
-                matriculas.Add(Map(reader));
-            }
-            return matriculas;
-        }
-        catch (DbException ex)
-        {
-            throw new InfrastructureException("ERRO_OBTER_POR_ALUNO", $"Erro ao obter matriculas do aluno ID {alunoId}: {ex.Message}", ex);
-        }
-    }
-
-    public async Task<Matricula?> ObterMatriculaAtivaPorAluno(int alunoId, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            string query = $"{BaseSelectQuery} WHERE m.aluno_id = @AlunoId AND m.data_fim >= CURDATE() ORDER BY m.data_fim DESC";
-            await using var connection = await OpenConnectionAsync(cancellationToken);
-            await using var command = connection.CreateCommand();
-            command.CommandText = query;
-            command.AddParameter("@AlunoId", alunoId, DbType.Int32);
-            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-            return await reader.ReadAsync(cancellationToken) ? Map(reader) : null;
-        }
-        catch (DbException ex)
-        {
-            throw new InfrastructureException("ERRO_OBTER_MATRICULA_ATIVA", $"Erro ao obter matricula ativa do aluno ID {alunoId}: {ex.Message}", ex);
-        }
-    }
-
-    public async Task<bool> PossuiMatriculaAtiva(int alunoId, CancellationToken cancellationToken = default)
-    {
-        var matricula = await ObterMatriculaAtivaPorAluno(alunoId, cancellationToken);
-        return matricula != null;
-    }
-
-    public async Task<IEnumerable<Matricula>> ObterAtivas(int alunoId = 0, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            string query = $"{BaseSelectQuery} WHERE m.data_fim >= CURDATE() {(alunoId > 0 ? "AND m.aluno_id = @id" : "")} ORDER BY m.data_fim ASC";
-            await using var connection = await OpenConnectionAsync(cancellationToken);
-            await using var command = connection.CreateCommand();
-            command.CommandText = query;
-            if (alunoId > 0)
-            {
-                command.AddParameter("@id", alunoId, DbType.Int32);
-            }
-            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-            var matriculas = new List<Matricula>();
-            while (await reader.ReadAsync(cancellationToken))
-            {
-                matriculas.Add(Map(reader));
-            }
-            return matriculas;
-        }
-        catch (DbException ex)
-        {
-            throw new InfrastructureException("ERRO_OBTER_MATRICULAS_ATIVAS", $"Erro ao obter matriculas ativas: {ex.Message}", ex);
-        }
-    }
-
+            Hoje(c);
+            if (alunoId > 0) c.AddParameter("@Aluno", alunoId, DbType.Int32);
+        }, "m.data_fim ASC", cancellationToken);
     public async Task<IEnumerable<Matricula>> ObterVencendoEmDias(int dias, CancellationToken cancellationToken = default)
     {
-        try
+        var hoje = DateOnly.FromDateTime(DateTime.Today);
+        if (dias < 0 || dias > DateOnly.MaxValue.DayNumber - hoje.DayNumber)
+            throw new ArgumentException("Informe um número de dias válido, maior ou igual a zero.");
+        return await ConsultarAsync("m.data_fim >= @Hoje AND m.data_fim <= @Limite", c =>
         {
-            string query = $"{BaseSelectQuery} WHERE m.data_fim >= CURDATE() AND m.data_fim <= DATE_ADD(CURDATE(), INTERVAL @Dias DAY) ORDER BY m.data_fim ASC";
-            await using var connection = await OpenConnectionAsync(cancellationToken);
-            await using var command = connection.CreateCommand();
-            command.CommandText = query;
-            command.AddParameter("@Dias", dias, DbType.Int32);
-            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-            var matriculas = new List<Matricula>();
-            while (await reader.ReadAsync(cancellationToken))
-            {
-                matriculas.Add(Map(reader));
-            }
-            return matriculas;
-        }
-        catch (DbException ex)
-        {
-            throw new InfrastructureException("ERRO_OBTER_MATRICULAS_VENCENDO", $"Erro ao obter matrículas vencendo em {dias} dias: {ex.Message}", ex);
-        }
+            Hoje(c); c.AddParameter("@Limite", hoje.AddDays(dias), DbType.Date);
+        }, "m.data_fim ASC", cancellationToken);
     }
+    public async Task<IEnumerable<Matricula>> ObterPorPlano(MatriculaPlano plano, CancellationToken cancellationToken = default) =>
+        await ConsultarAsync("m.plano = @Plano", c => c.AddParameter("@Plano", (int)plano, DbType.Int32), "a.nome", cancellationToken);
 
-    public async Task<IEnumerable<Matricula>> ObterPorPlano(MatriculaPlano plano, CancellationToken cancellationToken = default)
+    public Task<Matricula> Adicionar(Matricula entity, CancellationToken cancellationToken = default) => SalvarAsync(entity, false, cancellationToken);
+    public Task<Matricula> Atualizar(Matricula entity, CancellationToken cancellationToken = default) => SalvarAsync(entity, true, cancellationToken);
+    private async Task<Matricula> SalvarAsync(Matricula entity, bool atualizar, CancellationToken cancellationToken)
     {
-        try
+        await using var connection = await OpenConnectionAsync(cancellationToken);
+        await using var transaction = connection is Microsoft.Data.Sqlite.SqliteConnection sqlite
+            ? sqlite.BeginTransaction(deferred: false)
+            : await connection.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
+        if (atualizar)
         {
-            string query = $"{BaseSelectQuery} WHERE m.plano = @Plano ORDER BY a.nome";
-            await using var connection = await OpenConnectionAsync(cancellationToken);
-            await using var command = connection.CreateCommand();
-            command.CommandText = query;
-            command.AddParameter("@Plano", (int)plano, DbType.Int32);
-            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-            var matriculas = new List<Matricula>();
-            while (await reader.ReadAsync(cancellationToken))
-            {
-                matriculas.Add(Map(reader));
-            }
-            return matriculas;
+            await using var existe = connection.CreateCommand();
+            existe.Transaction = transaction;
+            existe.CommandText = "SELECT COUNT(*) FROM tb_matricula WHERE id_matricula = @Id";
+            existe.AddParameter("@Id", entity.Id, DbType.Int32);
+            if (Convert.ToInt32(await existe.ExecuteScalarAsync(cancellationToken)) == 0)
+                throw new KeyNotFoundException("Matrícula não encontrada.");
         }
-        catch (DbException ex)
+        if (!atualizar || entity.DataFim >= DateOnly.FromDateTime(DateTime.Today))
         {
-            throw new InfrastructureException("ERRO_OBTER_POR_PLANO", $"Erro ao obter matriculas pelo plano {plano}: {ex.Message}", ex);
+            await using var verificar = connection.CreateCommand();
+            verificar.Transaction = transaction;
+            verificar.CommandText = "SELECT COUNT(*) FROM tb_matricula WHERE aluno_id = @Aluno AND data_fim >= @Hoje AND id_matricula <> @Id";
+            verificar.AddParameter("@Aluno", entity.AlunoMatricula.Id, DbType.Int32);
+            verificar.AddParameter("@Id", atualizar ? entity.Id : 0, DbType.Int32);
+            Hoje(verificar);
+            if (Convert.ToInt32(await verificar.ExecuteScalarAsync(cancellationToken)) > 0)
+                throw new InvalidOperationException("O aluno já possui uma matrícula vigente ou agendada. Aguarde o encerramento ou exclua a matrícula existente.");
         }
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = atualizar ? """
+            UPDATE tb_matricula SET aluno_id=@Aluno, plano=@Plano, data_inicio=@Inicio, data_fim=@Fim,
+                objetivo=@Objetivo, restricao_medica=@Restricoes, obs_restricao=@Observacoes, laudo_medico=@Laudo
+                WHERE id_matricula=@Id
+            """ : FormatInsertQuery("""
+            INSERT INTO tb_matricula (aluno_id,plano,data_inicio,data_fim,objetivo,restricao_medica,obs_restricao,laudo_medico)
+                VALUES (@Aluno,@Plano,@Inicio,@Fim,@Objetivo,@Restricoes,@Observacoes,@Laudo)
+            """);
+        command.AddParameter("@Id", entity.Id, DbType.Int32);
+        command.AddParameter("@Aluno", entity.AlunoMatricula.Id, DbType.Int32);
+        command.AddParameter("@Plano", (int)entity.Plano, DbType.Int32);
+        command.AddParameter("@Inicio", entity.DataInicio, DbType.Date);
+        command.AddParameter("@Fim", entity.DataFim, DbType.Date);
+        command.AddParameter("@Objetivo", entity.Objetivo, DbType.String);
+        command.AddParameter("@Restricoes", (int)entity.RestricoesMedicas, DbType.Int32);
+        command.AddParameter("@Observacoes", entity.ObservacoesRestricoes, DbType.String);
+        command.AddParameter("@Laudo", (object?)entity.LaudoMedico?.Url ?? DBNull.Value, DbType.String);
+        var id = atualizar ? entity.Id : await command.ExecuteScalarIdAsync("MATRICULA", "Não foi possível obter o ID da matrícula.", cancellationToken);
+        if (atualizar) await command.ExecuteNonQueryAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+        if (!atualizar) typeof(Entity).GetProperty(nameof(Entity.Id))!.SetValue(entity, id);
+        return entity;
+    }
+    public async Task<bool> Remover(int id, CancellationToken cancellationToken = default)
+    {
+        await using var connection = await OpenConnectionAsync(cancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM tb_matricula WHERE id_matricula = @Id";
+        command.AddParameter("@Id", id, DbType.Int32);
+        return await command.ExecuteNonQueryAsync(cancellationToken) > 0;
     }
 }

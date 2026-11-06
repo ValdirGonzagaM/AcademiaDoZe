@@ -1,4 +1,4 @@
-﻿// Valdir Gonzaga
+// Valdir Gonzaga
 
 using AcademiaDoZe.Domain.Common;
 using AcademiaDoZe.Domain.Enums;
@@ -84,7 +84,10 @@ public class Matricula : Entity
         else
             objetivo = NormalizadoService.LimparEspacos(objetivo);
 
-        if (!Enum.IsDefined(restricoesMedicas))
+        const MatriculaRestricoes permitidas = MatriculaRestricoes.Diabetes | MatriculaRestricoes.Hipertensao
+            | MatriculaRestricoes.Alergia | MatriculaRestricoes.Labirintite
+            | MatriculaRestricoes.ProblemasRespiratorios | MatriculaRestricoes.RemedioContinuo;
+        if ((restricoesMedicas & ~permitidas) != 0)
             notifications.Add(
                 new Notification(
                     "RestricoesMedicas",
@@ -101,7 +104,7 @@ public class Matricula : Entity
 
         var matricula = new Matricula(
             id,
-            alunoMatricula,
+            alunoMatricula!,
             plano,
             dataInicio,
             dataFim,

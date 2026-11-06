@@ -1,26 +1,38 @@
-# Academia do Zé - Sistema de Gestão
+# Academia do Zé
 
-Projeto desenvolvido em C# e .NET seguindo os princípios de **Domain-Driven Design (DDD)** e arquitetura em camadas desacopladas.
+Sistema de gestão de academia em C# e .NET 10, com interface .NET MAUI e persistência local em SQLite.
 
-## 🛠️ Arquitetura do Sistema
+## Funcionalidades
 
-A solução está estruturada em 4 projetos principais:
+- Cadastro, consulta, edição e exclusão de logradouros, alunos e colaboradores.
+- Busca por CPF e CEP, fotos por câmera ou galeria e confirmação de senha.
+- Matrículas com planos mensal, trimestral, semestral e anual, data final calculada, restrições médicas e laudo em imagem.
+- Bloqueio de nova matrícula enquanto o aluno possuir matrícula vigente ou agendada.
+- Laudo obrigatório para menores de 16 anos e alunos com restrições médicas.
+- Filtros de matrículas por ID, aluno, CPF, nome, plano, situação e prazo de vencimento.
+- Dashboard com totais atualizados e acesso aos módulos.
 
-1. **`AcademiaDoZe.Domain`**: Camada central contendo o modelo de domínio rico (Entidades como `Aluno`, `Colaborador`, `Matricula`), Value Objects (`Cpf`, `Email`, `Endereco`, `Telefone`), Enums e Interfaces de Repositório. Regras de validação estritas são aplicadas nas fábricas (`Criar`).
-2. **`AcademiaDoZe.Application`**: Responsável pelos fluxos de uso da aplicação, Serviços de Negócio (`AlunoService`, `ColaboradorService`, `MatriculaService`), DTOs para tráfego de dados e extensões de mapeamento (`MappingExtensions`).
-3. **`AcademiaDoZe.Infrastructure`**: Implementação do acesso a dados utilizando **ADO.NET (MySQL)** através da abstração `BaseRepository`, contendo os repositórios concretos e injeção de dependência.
-4. **`AcademiaDoZe.Domain.Tests` / `Infrastructure.Tests`**: Cobertura de testes unitários validando entidades, serviços e regras de negócio.
+## Estrutura
 
-## 🧪 Qualidade e Testes
+- `AcademiaDoZe.Domain`: entidades, objetos de valor, enums e contratos de repositório.
+- `AcademiaDoZe.Application`: serviços, DTOs, validações e mapeamentos.
+- `AcademiaDoZe.Infrastructure`: acesso a dados e inicialização do banco SQLite.
+- `AcademiaDoZe.Presentation.AppMaui`: interface para Android e Windows.
+- Projetos `*.Tests`: testes de domínio e integração.
 
-- **CRUD de pessoas (SQLite):** testes de integração em `AcademiaDoZe.Application.Tests` cobrem aluno e colaborador, incluindo persistência de fotos, filtros e exclusão.
-- **Domínio:** 174 testes aprovados, incluindo normalização de CPF formatado e rejeição de quantidades inválidas de dígitos. A regra atual verifica o tamanho, sem calcular dígitos verificadores.
-- **Android:** aplicação MAUI com módulos de alunos/colaboradores, câmera, galeria e banco SQLite inicializado no diretório privado do app.
-- **Demonstração:** veja o [roteiro e instruções de execução](docs/DEMONSTRACAO.md).
+O banco fica no diretório privado do aplicativo. A inicialização cria as tabelas ausentes sem apagar os cadastros existentes. Exclua as matrículas antes de remover um aluno que esteja vinculado a elas.
 
-## 🚀 Tecnologias Utilizadas
+## Execução
 
-- **Linguagem:** C# (.NET)
-- **Persistência:** ADO.NET / MySQL
-- **Testes:** MSTest / xUnit
-- **Padrões:** DDD, Repository Pattern, Factory Methods, DTOs & Mappings
+Use Visual Studio com suporte a .NET 10 e a carga de desenvolvimento .NET MAUI. Abra `AcademiaDoZe.slnx`, defina `AcademiaDoZe.Presentation.AppMaui` como projeto de inicialização e selecione Windows Machine ou um dispositivo Android.
+
+Para Android, são necessários o workload `maui-android`, JDK 21 e Android SDK/API 36. A câmera depende das permissões concedidas ao aplicativo no dispositivo.
+
+## Testes
+
+```bash
+dotnet test AcademiaDoZe.Domain.Tests/AcademiaDoZe.Domain.Tests.csproj
+dotnet test AcademiaDoZe.Application.Tests/AcademiaDoZe.Application.Tests.csproj
+```
+
+Os testes de integração desses projetos usam bancos SQLite temporários. Os testes do projeto `AcademiaDoZe.Infrastructure.Tests` utilizam MySQL e exigem um banco configurado separadamente.

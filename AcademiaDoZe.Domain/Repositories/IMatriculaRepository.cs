@@ -1,10 +1,11 @@
-﻿using AcademiaDoZe.Domain.Entities;
+using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Domain.Enums;
 
 namespace AcademiaDoZe.Domain.Repositories;
 
 public interface IMatriculaRepository
 {
+    Task<int> Contar(CancellationToken cancellationToken = default);
     Task<Matricula?> ObterPorId(int id, CancellationToken cancellationToken = default);
     Task<IEnumerable<Matricula>> ObterTodos(CancellationToken cancellationToken = default);
     Task<Matricula> Adicionar(Matricula entity, CancellationToken cancellationToken = default);

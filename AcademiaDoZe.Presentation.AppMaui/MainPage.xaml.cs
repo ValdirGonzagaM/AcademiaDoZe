@@ -4,10 +4,12 @@ namespace AcademiaDoZe.Presentation.AppMaui;
 public partial class MainPage : ContentPage
 {
     private readonly ILogradouroService _logradouros;
+    private readonly IMatriculaService _matriculas;
     private readonly IColaboradorService _colaboradores;
     private readonly IAlunoService _alunos;
-    public MainPage(ILogradouroService logradouros, IColaboradorService colaboradores, IAlunoService alunos)
+    public MainPage(ILogradouroService logradouros, IColaboradorService colaboradores, IAlunoService alunos, IMatriculaService matriculas)
     {
+        _matriculas = matriculas;
         _logradouros = logradouros; _colaboradores = colaboradores; _alunos = alunos;
         InitializeComponent();
     }
@@ -19,7 +21,9 @@ public partial class MainPage : ContentPage
             var enderecos = _logradouros.ObterTodosAsync();
             var colaboradores = _colaboradores.ContarAsync();
             var alunos = _alunos.ContarAsync();
-            await Task.WhenAll(enderecos, colaboradores, alunos);
+            var matriculas = _matriculas.ContarAsync();
+            await Task.WhenAll(enderecos, colaboradores, alunos, matriculas);
+            TotalMatriculasLabel.Text = $"{matriculas.Result} matrícula(s) cadastrada(s)";
             TotalLogradourosLabel.Text = $"{enderecos.Result.Count()} logradouro(s) cadastrado(s)";
             TotalColaboradoresLabel.Text = $"{colaboradores.Result} colaborador(es) cadastrado(s)";
             TotalAlunosLabel.Text = $"{alunos.Result} aluno(s) cadastrado(s)";
@@ -27,10 +31,11 @@ public partial class MainPage : ContentPage
         catch (Exception ex)
         {
             TotalLogradourosLabel.Text = "Não foi possível consultar os totais.";
-            TotalColaboradoresLabel.Text = TotalAlunosLabel.Text = "Total indisponível";
+            TotalMatriculasLabel.Text = TotalColaboradoresLabel.Text = TotalAlunosLabel.Text = "Total indisponível";
             System.Diagnostics.Debug.WriteLine(ex);
         }
     }
+    private async void OnMatriculasClicked(object? sender, EventArgs e) => await Shell.Current.GoToAsync("//MatriculaListPage");
     private async void OnColaboradoresClicked(object? sender, EventArgs e) => await Shell.Current.GoToAsync("//ColaboradorListPage");
     private async void OnAlunosClicked(object? sender, EventArgs e) => await Shell.Current.GoToAsync("//AlunoListPage");
     private async void OnLogradourosClicked(object? sender, EventArgs e) => await Shell.Current.GoToAsync("//LogradouroListPage");

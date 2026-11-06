@@ -126,7 +126,7 @@ public sealed class PessoaCrudTests : IDisposable
     }
 
     [Fact]
-    public async Task Colaborador_FiltrosDoSlide_Contagem_E_BuscasDoFormulario()
+    public async Task Colaborador_Filtros_Contagem_E_BuscasDoFormulario()
     {
         var endereco = await EnderecoAsync();
         var alunos = new AlunoService(new AlunoRepository(Connection, DatabaseType.Sqlite));

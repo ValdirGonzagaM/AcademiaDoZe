@@ -21,6 +21,8 @@ public static class MauiProgram
         ConfigurationHelper.ConfigureServices(builder.Services);
 
         builder.Services.AddTransient<MainPage>();
+        builder.Services.AddTransient<MatriculaListPage>();
+        builder.Services.AddTransient<Services.MatriculaConsulta>();
         builder.Services.AddTransient<Services.PessoaCadastro>();
         builder.Services.AddSingleton<Services.FotoService>();
         builder.Services.AddTransient<ColaboradorListPage>();

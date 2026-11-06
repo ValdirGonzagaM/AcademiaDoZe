@@ -31,5 +31,16 @@ public static class DatabaseInitializer
                 """;
             command.ExecuteNonQuery();
         }
+        command.CommandText = """
+            CREATE TABLE IF NOT EXISTS tb_matricula (
+                id_matricula INTEGER PRIMARY KEY AUTOINCREMENT,
+                aluno_id INTEGER NOT NULL REFERENCES tb_aluno(id_aluno),
+                plano INTEGER NOT NULL, data_inicio TEXT NOT NULL, data_fim TEXT NOT NULL,
+                objetivo TEXT NOT NULL, restricao_medica INTEGER NOT NULL DEFAULT 0,
+                obs_restricao TEXT NOT NULL DEFAULT '', laudo_medico TEXT);
+            CREATE INDEX IF NOT EXISTS ix_matricula_aluno_fim ON tb_matricula(aluno_id, data_fim);
+            """;
+        command.ExecuteNonQuery();
+
     }
 }
