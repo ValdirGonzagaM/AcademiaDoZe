@@ -51,7 +51,7 @@ public abstract class PessoaRepository<T> : BaseRepository where T : Pessoa
             var foto = reader.GetNullableString("foto");
             result.Add(Create(reader.GetInt32Value(_id), reader.GetStringValue("nome"),
                 reader.GetStringValue("cpf"), reader.GetDateOnlyValue("nascimento"),
-                reader.GetStringValue("telefone"), reader.GetStringValue("email"),
+                reader.GetStringValue("telefone"), reader.GetNullableString("email") ?? "",
                 LogradouroRepository.Map(reader, "logradouro_nome"), reader.GetStringValue("numero"),
                 reader.GetNullableString("complemento") ?? "", reader.GetStringValue("senha"),
                 foto == null ? null! : Arquivo.Criar("foto.jpg", foto), reader));
@@ -74,11 +74,21 @@ public abstract class PessoaRepository<T> : BaseRepository where T : Pessoa
 
     public Task<T> AdicionarAsync(T entity, CancellationToken cancellationToken = default) => SaveAsync(entity, false, cancellationToken);
     public Task<T> AtualizarAsync(T entity, CancellationToken cancellationToken = default) => SaveAsync(entity, true, cancellationToken);
-    private async Task<T> SaveAsync(T entity, bool update, CancellationToken cancellationToken)
+    protected async Task<T> SaveAsync(T entity, bool update, CancellationToken cancellationToken, bool primeiroAdministrador = false)
     {
         ArgumentNullException.ThrowIfNull(entity);
         await using var connection = await OpenConnectionAsync(cancellationToken);
         await using var command = connection.CreateCommand();
+        await using var transaction = primeiroAdministrador ? connection is Microsoft.Data.Sqlite.SqliteConnection sqlite
+            ? sqlite.BeginTransaction(deferred: false) : await connection.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken) : null;
+        command.Transaction = transaction;
+        if (primeiroAdministrador)
+        {
+            await using var verificar = connection.CreateCommand(); verificar.Transaction = transaction;
+            verificar.CommandText = "SELECT COUNT(*) FROM tb_colaborador WHERE tipo=0";
+            if (Convert.ToInt32(await verificar.ExecuteScalarAsync(cancellationToken)) > 0)
+                throw new InvalidOperationException("Já existe um administrador cadastrado. Faça login para continuar.");
+        }
         var columns = "cpf,nome,nascimento,telefone,email,logradouro_id,numero,complemento,senha,foto";
         var parameters = "@Cpf,@Nome,@Nascimento,@Telefone,@Email,@LogradouroId,@Numero,@Complemento,@Senha,@Foto";
         if (_colaborador) { columns += ",admissao,tipo,vinculo"; parameters += ",@Admissao,@Tipo,@Vinculo"; }
@@ -90,7 +100,7 @@ public abstract class PessoaRepository<T> : BaseRepository where T : Pessoa
         command.AddParameter("@Nome", entity.Nome, DbType.String);
         command.AddParameter("@Nascimento", entity.DataNascimento, DbType.Date);
         command.AddParameter("@Telefone", entity.Telefone.Valor, DbType.String);
-        command.AddParameter("@Email", entity.Email.Valor, DbType.String);
+        command.AddParameter("@Email", string.IsNullOrEmpty(entity.Email.Valor) ? DBNull.Value : entity.Email.Valor, DbType.String);
         command.AddParameter("@LogradouroId", entity.Endereco.Logradouro.Id, DbType.Int32);
         command.AddParameter("@Numero", entity.Endereco.Numero, DbType.String);
         command.AddParameter("@Complemento", entity.Endereco.Complemento, DbType.String);
@@ -112,6 +122,7 @@ public abstract class PessoaRepository<T> : BaseRepository where T : Pessoa
             var id = await command.ExecuteScalarIdAsync("CADASTRO", "Não foi possível obter o ID.", cancellationToken);
             typeof(Entity).GetProperty(nameof(Entity.Id))!.SetValue(entity, id);
         }
+        if (transaction != null) await transaction.CommitAsync(cancellationToken);
         return entity;
     }
 

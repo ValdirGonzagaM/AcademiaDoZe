@@ -1,3 +1,4 @@
+using AcademiaDoZe.Application.Seguranca;
 using AcademiaDoZe.Application.DTOs;
 using AcademiaDoZe.Application.Interfaces;
 using AcademiaDoZe.Application.Mappings;
@@ -8,15 +9,26 @@ namespace AcademiaDoZe.Application.Services;
 
 public class LogradouroService : ILogradouroService
 {
+    private readonly SessaoUsuario? _sessao;
+    private readonly IColaboradorRepository? _colaboradores;
     private readonly Func<ILogradouroRepository> _repoFactory;
 
-    public LogradouroService(Func<ILogradouroRepository> repoFactory)
+    public LogradouroService(Func<ILogradouroRepository> repoFactory, SessaoUsuario? sessao = null, IColaboradorRepository? colaboradores = null)
     {
+        _sessao = sessao; _colaboradores = colaboradores;
         _repoFactory = repoFactory ?? throw new ArgumentNullException(nameof(repoFactory));
+    }
+
+    private async Task AutorizarAsync(bool gravar, bool permitirInicial = false)
+    {
+        if (_sessao == null) return;
+        if (!_sessao.Autenticado && (!gravar || permitirInicial) && _colaboradores != null && !await _colaboradores.ExisteAdministradorAsync()) return;
+        _sessao.Exigir(gravar ? Permissao.Logradouros : Permissao.LerEnderecos);
     }
 
     public async Task<bool> CepJaExisteAsync(string cep, int? id = null, CancellationToken cancellationToken = default)
     {
+        await AutorizarAsync(false);
         if (string.IsNullOrWhiteSpace(cep)) return false;
         var cepResult = Cep.Criar(cep);
         if (cepResult.IsFailure) return false;
@@ -29,18 +41,21 @@ public class LogradouroService : ILogradouroService
 
     public async Task<LogradouroDto?> ObterPorIdAsync(int id, CancellationToken cancellationToken = default)
     {
+        await AutorizarAsync(false);
         var logradouro = await _repoFactory().ObterPorId(id, cancellationToken);
         return logradouro?.ToDto();
     }
 
     public async Task<IEnumerable<LogradouroDto>> ObterTodosAsync(CancellationToken cancellationToken = default)
     {
+        await AutorizarAsync(false);
         var logradouros = await _repoFactory().ObterTodos(cancellationToken);
         return [.. logradouros.Select(l => l.ToDto())];
     }
 
     public async Task<LogradouroDto?> ObterPorCepAsync(string cep, CancellationToken cancellationToken = default)
     {
+        await AutorizarAsync(false);
         if (string.IsNullOrWhiteSpace(cep))
             throw new ArgumentException("CEP não pode ser vazio.", nameof(cep));
 
@@ -55,6 +70,7 @@ public class LogradouroService : ILogradouroService
 
     public async Task<IEnumerable<LogradouroDto>> ObterPorNomeAsync(string nome, CancellationToken cancellationToken = default)
     {
+        await AutorizarAsync(false);
         var logradouros = await _repoFactory().ObterTodos(cancellationToken);
         var filtro = nome?.Trim() ?? "";
         return [.. logradouros.Where(l => l.Nome.Contains(filtro, StringComparison.OrdinalIgnoreCase)).Select(l => l.ToDto())];
@@ -62,6 +78,7 @@ public class LogradouroService : ILogradouroService
 
     public async Task<IEnumerable<LogradouroDto>> ObterPorCidadeAsync(string cidade, CancellationToken cancellationToken = default)
     {
+        await AutorizarAsync(false);
         if (string.IsNullOrWhiteSpace(cidade))
             throw new ArgumentException("Cidade não pode ser vazia.", nameof(cidade));
 
@@ -71,6 +88,7 @@ public class LogradouroService : ILogradouroService
 
     public async Task<IEnumerable<LogradouroDto>> ObterPorBairroAsync(string cidade, string bairro, CancellationToken cancellationToken = default)
     {
+        await AutorizarAsync(false);
         if (string.IsNullOrWhiteSpace(cidade)) throw new ArgumentException("Cidade não pode ser vazia.", nameof(cidade));
         if (string.IsNullOrWhiteSpace(bairro)) throw new ArgumentException("Bairro não pode ser vazio.", nameof(bairro));
 
@@ -83,6 +101,7 @@ public class LogradouroService : ILogradouroService
 
     public async Task<LogradouroDto> AdicionarAsync(LogradouroDto logradouroDto, CancellationToken cancellationToken = default)
     {
+        await AutorizarAsync(true, permitirInicial: true);
         ArgumentNullException.ThrowIfNull(logradouroDto);
 
         var cepResult = Cep.Criar(logradouroDto.Cep);
@@ -99,6 +118,7 @@ public class LogradouroService : ILogradouroService
 
     public async Task<LogradouroDto> AtualizarAsync(LogradouroDto logradouroDto, CancellationToken cancellationToken = default)
     {
+        await AutorizarAsync(true);
         ArgumentNullException.ThrowIfNull(logradouroDto);
 
         var logradouroExistente = await _repoFactory().ObterPorId(logradouroDto.Id, cancellationToken)
@@ -118,6 +138,7 @@ public class LogradouroService : ILogradouroService
 
     public async Task<bool> RemoverAsync(int id, CancellationToken cancellationToken = default)
     {
+        await AutorizarAsync(true);
         var logradouro = await _repoFactory().ObterPorId(id, cancellationToken);
         if (logradouro == null) return false;
         return await _repoFactory().Remover(id, cancellationToken);

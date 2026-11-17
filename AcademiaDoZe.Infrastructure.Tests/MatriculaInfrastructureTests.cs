@@ -1,4 +1,4 @@
-﻿using AcademiaDoZe.Domain.Entities;
+using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Domain.Enums;
 using AcademiaDoZe.Domain.Repositories;
 using AcademiaDoZe.Domain.ValueObjects;
@@ -9,7 +9,8 @@ namespace AcademiaDoZe.Infrastructure.Tests;
 
 public class MatriculaInfrastructureTests
 {
-    private const string ConnectionString = "Server=localhost;Port=3307;Database=db_academia;Uid=root;Pwd=Miguel123!;";
+    private static string ConnectionString => Environment.GetEnvironmentVariable("ACADEMIA_TEST_MYSQL")
+        ?? throw new InvalidOperationException("Defina ACADEMIA_TEST_MYSQL com a conexão do banco MySQL de testes.");
     private readonly MatriculaRepository _repository;
     private readonly AlunoRepository _alunoRepository;
     private readonly LogradouroRepository _logradouroRepository;

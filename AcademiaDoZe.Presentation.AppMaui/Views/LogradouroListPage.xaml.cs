@@ -17,6 +17,8 @@ public partial class LogradouroListPage : ContentPage
         if (BindingContext is LogradouroListViewModel viewModel)
         {
             await viewModel.SearchLogradourosAsync();
+            viewModel.AtualizarIdioma();
+            Localizador.Atual.Aplicar(this);
         }
     }
 }

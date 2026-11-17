@@ -1,30 +1,14 @@
-using CommunityToolkit.Mvvm.Messaging;
-using AcademiaDoZe.Presentation.AppMaui.Messages;
-
 namespace AcademiaDoZe.Presentation.AppMaui;
 
 public partial class App : Microsoft.Maui.Controls.Application
 {
-    public App()
+    private readonly IServiceProvider _services;
+    public App(IServiceProvider services)
     {
+        _services = services;
+        Localizador.Atual.Alterar(Preferences.Default.Get("IdiomaApp", "pt-BR"));
         InitializeComponent();
-
-        // Escuta a mensagem e altera o tema na hora
-        WeakReferenceMessenger.Default.Register<TemaPreferencesUpdatedMessage>(this, (r, m) =>
-        {
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                UserAppTheme = m.Value switch
-                {
-                    "Dark" => AppTheme.Dark,
-                    "Light" => AppTheme.Light,
-                    _ => AppTheme.Unspecified
-                };
-            });
-        });
-
-
+        UserAppTheme = Preferences.Default.Get("TemaApp", "System") switch { "Dark" => AppTheme.Dark, "Light" => AppTheme.Light, _ => AppTheme.Unspecified };
     }
-
-    protected override Window CreateWindow(IActivationState? activationState) => new(new AppShell());
+    protected override Window CreateWindow(IActivationState? activationState) => new(_services.GetRequiredService<AppShell>());
 }

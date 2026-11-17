@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,6 +17,9 @@ public record Email
     {
         Valor = valor;
     }
+
+    public static Result<Email> Opcional(string? valor) => string.IsNullOrWhiteSpace(valor)
+        ? Result<Email>.Success(new Email(string.Empty)) : Criar(valor.Trim());
 
     public static Result<Email> Criar(string valor)
     {

@@ -1,0 +1,1022 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+  </resheader>
+  <data name="Atenção" xml:space="preserve">
+    <value>Attention</value>
+  </data>
+  <data name="Erro" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Sucesso" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="Validação" xml:space="preserve">
+    <value>Validation</value>
+  </data>
+  <data name="Confirmação" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="Confirmar" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Cancelar" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Buscar" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Salvar" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Editar" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Excluir" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Carregar" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="Início" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Entrar" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Sair" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="Sair da conta" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="Deseja encerrar a sessão?" xml:space="preserve">
+    <value>Would you like to sign out?</value>
+  </data>
+  <data name="Aluno" xml:space="preserve">
+    <value>Student</value>
+  </data>
+  <data name="Alunos" xml:space="preserve">
+    <value>Students</value>
+  </data>
+  <data name="Colaborador" xml:space="preserve">
+    <value>Employee</value>
+  </data>
+  <data name="Colaboradores" xml:space="preserve">
+    <value>Employees</value>
+  </data>
+  <data name="Equipe" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="Matrículas" xml:space="preserve">
+    <value>Memberships</value>
+  </data>
+  <data name="Logradouros" xml:space="preserve">
+    <value>Addresses</value>
+  </data>
+  <data name="Logradouro" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Endereços" xml:space="preserve">
+    <value>Addresses</value>
+  </data>
+  <data name="Minha conta" xml:space="preserve">
+    <value>My account</value>
+  </data>
+  <data name="Configurações" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Idioma" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Aparência" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="Claro" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Escuro" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Sistema" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="Armazenamento" xml:space="preserve">
+    <value>Storage</value>
+  </data>
+  <data name="Do seu jeito" xml:space="preserve">
+    <value>Make it yours</value>
+  </data>
+  <data name="Personalize sua experiência na academia." xml:space="preserve">
+    <value>Personalize your gym experience.</value>
+  </data>
+  <data name="A alteração é aplicada imediatamente e salva neste dispositivo." xml:space="preserve">
+    <value>Changes apply immediately and are saved on this device.</value>
+  </data>
+  <data name="SQLite local — seus cadastros são mantidos neste dispositivo." xml:space="preserve">
+    <value>Local SQLite — your records are stored on this device.</value>
+  </data>
+  <data name="MOVIMENTO · SAÚDE · CONEXÃO" xml:space="preserve">
+    <value>MOVEMENT · HEALTH · CONNECTION</value>
+  </data>
+  <data name="Seu próximo movimento" xml:space="preserve">
+    <value>Your next move</value>
+  </data>
+  <data name="Acompanhe a rotina, cuide das pessoas e mantenha tudo em dia." xml:space="preserve">
+    <value>Follow the routine, care for people and keep everything on track.</value>
+  </data>
+  <data name="AGORA NA ACADEMIA" xml:space="preserve">
+    <value>AT THE GYM NOW</value>
+  </data>
+  <data name="Sua rotina começa por aqui." xml:space="preserve">
+    <value>Your routine starts here.</value>
+  </data>
+  <data name="Gerenciar alunos" xml:space="preserve">
+    <value>Manage students</value>
+  </data>
+  <data name="Gerenciar colaboradores" xml:space="preserve">
+    <value>Manage employees</value>
+  </data>
+  <data name="Gerenciar matrículas" xml:space="preserve">
+    <value>Manage memberships</value>
+  </data>
+  <data name="Abrir logradouros" xml:space="preserve">
+    <value>Open addresses</value>
+  </data>
+  <data name="Ver indicadores e relatórios" xml:space="preserve">
+    <value>View insights and reports</value>
+  </data>
+  <data name="Não foi possível consultar os totais." xml:space="preserve">
+    <value>Unable to load the totals.</value>
+  </data>
+  <data name="Bem-vindo à Academia do Zé" xml:space="preserve">
+    <value>Welcome to Academia do Zé</value>
+  </data>
+  <data name="Entre com seu CPF e sua senha para continuar." xml:space="preserve">
+    <value>Enter your CPF and password to continue.</value>
+  </data>
+  <data name="Perfil de acesso" xml:space="preserve">
+    <value>Account type</value>
+  </data>
+  <data name="CPF" xml:space="preserve">
+    <value>CPF</value>
+  </data>
+  <data name="CPF completo" xml:space="preserve">
+    <value>Full CPF</value>
+  </data>
+  <data name="CPF (11 dígitos)" xml:space="preserve">
+    <value>CPF (11 digits)</value>
+  </data>
+  <data name="Senha" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Senha atual" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="Nova senha" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="Confirmar senha" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="Confirme a senha" xml:space="preserve">
+    <value>Confirm your password</value>
+  </data>
+  <data name="Senha (mínimo de 6 caracteres)" xml:space="preserve">
+    <value>Password (at least 6 characters)</value>
+  </data>
+  <data name="Nova senha (em branco mantém a atual)" xml:space="preserve">
+    <value>New password (leave blank to keep current)</value>
+  </data>
+  <data name="Segurança da conta" xml:space="preserve">
+    <value>Account security</value>
+  </data>
+  <data name="Alterar minha senha" xml:space="preserve">
+    <value>Change my password</value>
+  </data>
+  <data name="Senha alterada com sucesso." xml:space="preserve">
+    <value>Password changed successfully.</value>
+  </data>
+  <data name="Na edição, deixe senha e confirmação em branco para manter a senha atual." xml:space="preserve">
+    <value>When editing, leave both password fields blank to keep the current password.</value>
+  </data>
+  <data name="Configuração inicial" xml:space="preserve">
+    <value>Initial setup</value>
+  </data>
+  <data name="Cadastrar endereço inicial" xml:space="preserve">
+    <value>Add initial address</value>
+  </data>
+  <data name="Cadastrar primeiro administrador" xml:space="preserve">
+    <value>Create first administrator</value>
+  </data>
+  <data name="Configurar meu cadastro como administrador" xml:space="preserve">
+    <value>Set up my account as administrator</value>
+  </data>
+  <data name="Configurar este cadastro CLT como primeiro administrador?" xml:space="preserve">
+    <value>Set this CLT employee account as the first administrator?</value>
+  </data>
+  <data name="Cadastre um endereço e o primeiro administrador. Se já possui cadastro CLT, informe seu CPF e senha e use a opção abaixo." xml:space="preserve">
+    <value>Add an address and the first administrator. If you already have a CLT employee account, enter your CPF and password and use the option below.</value>
+  </data>
+  <data name="Nome" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Nome completo" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+  <data name="Nome / Rua" xml:space="preserve">
+    <value>Street / Name</value>
+  </data>
+  <data name="Nascimento" xml:space="preserve">
+    <value>Date of birth</value>
+  </data>
+  <data name="Telefone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="Telefone com DDD" xml:space="preserve">
+    <value>Phone including area code</value>
+  </data>
+  <data name="E-mail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="E-mail (opcional)" xml:space="preserve">
+    <value>Email (optional)</value>
+  </data>
+  <data name="E-mail completo" xml:space="preserve">
+    <value>Full email address</value>
+  </data>
+  <data name="CEP" xml:space="preserve">
+    <value>Postal code (CEP)</value>
+  </data>
+  <data name="CEP (8 dígitos)" xml:space="preserve">
+    <value>Postal code (8 digits)</value>
+  </data>
+  <data name="Bairro" xml:space="preserve">
+    <value>District</value>
+  </data>
+  <data name="Cidade" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="UF" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="UF (ex.: SC)" xml:space="preserve">
+    <value>State (e.g. SC)</value>
+  </data>
+  <data name="País" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="País (ex.: Brasil)" xml:space="preserve">
+    <value>Country (e.g. Brasil)</value>
+  </data>
+  <data name="Número" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="Complemento" xml:space="preserve">
+    <value>Address line 2</value>
+  </data>
+  <data name="Complemento (opcional)" xml:space="preserve">
+    <value>Address line 2 (optional)</value>
+  </data>
+  <data name="Buscar CPF" xml:space="preserve">
+    <value>Find CPF</value>
+  </data>
+  <data name="Buscar CEP" xml:space="preserve">
+    <value>Find postal code</value>
+  </data>
+  <data name="Buscar endereço" xml:space="preserve">
+    <value>Find address</value>
+  </data>
+  <data name="Selecione o logradouro" xml:space="preserve">
+    <value>Select an address</value>
+  </data>
+  <data name="Selecione um logradouro cadastrado ou busque pelo CEP." xml:space="preserve">
+    <value>Select a registered address or search by postal code.</value>
+  </data>
+  <data name="Selecione um logradouro ou busque pelo CEP." xml:space="preserve">
+    <value>Select an address or search by postal code.</value>
+  </data>
+  <data name="Cadastre o endereço no menu Logradouros antes de selecionar." xml:space="preserve">
+    <value>Register the address in the Addresses menu before selecting it.</value>
+  </data>
+  <data name="CPF não encontrado. Você pode preencher um novo cadastro." xml:space="preserve">
+    <value>CPF not found. You can fill in a new registration.</value>
+  </data>
+  <data name="Busca por CPF" xml:space="preserve">
+    <value>CPF search</value>
+  </data>
+  <data name="Cadastro encontrado" xml:space="preserve">
+    <value>Registration found</value>
+  </data>
+  <data name="Carregar os dados para edição? Isso substituirá os campos e a foto deste formulário." xml:space="preserve">
+    <value>Load this record for editing? This will replace the current fields and photo.</value>
+  </data>
+  <data name="Cadastro salvo" xml:space="preserve">
+    <value>Registration saved</value>
+  </data>
+  <data name="Dados e foto foram salvos com sucesso." xml:space="preserve">
+    <value>Data and photo saved successfully.</value>
+  </data>
+  <data name="Cadastro excluído" xml:space="preserve">
+    <value>Registration deleted</value>
+  </data>
+  <data name="A exclusão foi concluída." xml:space="preserve">
+    <value>Deletion completed.</value>
+  </data>
+  <data name="Excluir cadastro" xml:space="preserve">
+    <value>Delete registration</value>
+  </data>
+  <data name="+ Novo colaborador" xml:space="preserve">
+    <value>+ New employee</value>
+  </data>
+  <data name="+ Novo aluno" xml:space="preserve">
+    <value>+ New student</value>
+  </data>
+  <data name="Novo colaborador" xml:space="preserve">
+    <value>New employee</value>
+  </data>
+  <data name="Novo aluno" xml:space="preserve">
+    <value>New student</value>
+  </data>
+  <data name="Editar colaborador" xml:space="preserve">
+    <value>Edit employee</value>
+  </data>
+  <data name="Editar aluno" xml:space="preserve">
+    <value>Edit student</value>
+  </data>
+  <data name="Salvar cadastro" xml:space="preserve">
+    <value>Save registration</value>
+  </data>
+  <data name="Nenhum cadastro encontrado." xml:space="preserve">
+    <value>No records found.</value>
+  </data>
+  <data name="Carregando cadastros…" xml:space="preserve">
+    <value>Loading records…</value>
+  </data>
+  <data name="Filtrar por" xml:space="preserve">
+    <value>Filter by</value>
+  </data>
+  <data name="Filtro" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Digite o CPF completo" xml:space="preserve">
+    <value>Enter the full CPF</value>
+  </data>
+  <data name="Digite parte do nome" xml:space="preserve">
+    <value>Enter part of the name</value>
+  </data>
+  <data name="ID do cadastro" xml:space="preserve">
+    <value>Registration ID</value>
+  </data>
+  <data name="Tipo" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Tipo de colaborador" xml:space="preserve">
+    <value>Employee role</value>
+  </data>
+  <data name="Vínculo" xml:space="preserve">
+    <value>Employment type</value>
+  </data>
+  <data name="Admissão" xml:space="preserve">
+    <value>Hire date</value>
+  </data>
+  <data name="Administrador" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="Atendente" xml:space="preserve">
+    <value>Receptionist</value>
+  </data>
+  <data name="Instrutor" xml:space="preserve">
+    <value>Instructor</value>
+  </data>
+  <data name="Estagiário" xml:space="preserve">
+    <value>Intern</value>
+  </data>
+  <data name="CLT" xml:space="preserve">
+    <value>CLT</value>
+  </data>
+  <data name="Administrador, Atendente ou Instrutor" xml:space="preserve">
+    <value>Administrator, Receptionist or Instructor</value>
+  </data>
+  <data name="CLT ou Estagiário" xml:space="preserve">
+    <value>CLT or Intern</value>
+  </data>
+  <data name="PESSOAS · ACADEMIA DO ZÉ" xml:space="preserve">
+    <value>PEOPLE · ACADEMIA DO ZÉ</value>
+  </data>
+  <data name="Tirar foto" xml:space="preserve">
+    <value>Take photo</value>
+  </data>
+  <data name="Galeria" xml:space="preserve">
+    <value>Gallery</value>
+  </data>
+  <data name="Tirar foto do cadastro" xml:space="preserve">
+    <value>Take registration photo</value>
+  </data>
+  <data name="Selecionar foto da galeria" xml:space="preserve">
+    <value>Select photo from gallery</value>
+  </data>
+  <data name="Nenhuma foto selecionada" xml:space="preserve">
+    <value>No photo selected</value>
+  </data>
+  <data name="Foto do cadastro" xml:space="preserve">
+    <value>Registration photo</value>
+  </data>
+  <data name="Foto tirada pela câmera" xml:space="preserve">
+    <value>Photo taken with camera</value>
+  </data>
+  <data name="Foto selecionada da galeria" xml:space="preserve">
+    <value>Photo selected from gallery</value>
+  </data>
+  <data name="+ Novo logradouro" xml:space="preserve">
+    <value>+ New address</value>
+  </data>
+  <data name="Novo logradouro" xml:space="preserve">
+    <value>New address</value>
+  </data>
+  <data name="Editar logradouro" xml:space="preserve">
+    <value>Edit address</value>
+  </data>
+  <data name="Salvar logradouro" xml:space="preserve">
+    <value>Save address</value>
+  </data>
+  <data name="Nenhum logradouro encontrado." xml:space="preserve">
+    <value>No addresses found.</value>
+  </data>
+  <data name="Logradouro salvo com sucesso!" xml:space="preserve">
+    <value>Address saved successfully!</value>
+  </data>
+  <data name="Logradouro excluído!" xml:space="preserve">
+    <value>Address deleted!</value>
+  </data>
+  <data name="Informe um ID numérico maior que zero." xml:space="preserve">
+    <value>Enter an ID number greater than zero.</value>
+  </data>
+  <data name="Para buscar por CEP, informe um CEP válido com 8 dígitos." xml:space="preserve">
+    <value>Enter a valid 8-digit postal code.</value>
+  </data>
+  <data name="Não foi possível concluir a operação." xml:space="preserve">
+    <value>Unable to complete the operation.</value>
+  </data>
+  <data name="A conexão expirou." xml:space="preserve">
+    <value>The connection timed out.</value>
+  </data>
+  <data name="Tempo Esgotado" xml:space="preserve">
+    <value>Timeout</value>
+  </data>
+  <data name="Nova matrícula" xml:space="preserve">
+    <value>New membership</value>
+  </data>
+  <data name="Editar matrícula" xml:space="preserve">
+    <value>Edit membership</value>
+  </data>
+  <data name="+ Nova matrícula" xml:space="preserve">
+    <value>+ New membership</value>
+  </data>
+  <data name="Buscar aluno por CPF" xml:space="preserve">
+    <value>Find student by CPF</value>
+  </data>
+  <data name="Busque um aluno cadastrado pelo CPF." xml:space="preserve">
+    <value>Find a registered student by CPF.</value>
+  </data>
+  <data name="Aluno não encontrado. Cadastre o aluno antes de realizar a matrícula." xml:space="preserve">
+    <value>Student not found. Register the student before creating a membership.</value>
+  </data>
+  <data name="CPF do aluno" xml:space="preserve">
+    <value>Student CPF</value>
+  </data>
+  <data name="ID do aluno" xml:space="preserve">
+    <value>Student ID</value>
+  </data>
+  <data name="Nome do aluno" xml:space="preserve">
+    <value>Student name</value>
+  </data>
+  <data name="Vencendo em dias" xml:space="preserve">
+    <value>Expiring in days</value>
+  </data>
+  <data name="Quantidade de dias (0 = hoje)" xml:space="preserve">
+    <value>Number of days (0 = today)</value>
+  </data>
+  <data name="Ativas" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Todas" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="ID numérico" xml:space="preserve">
+    <value>Numeric ID</value>
+  </data>
+  <data name="ID do aluno (opcional)" xml:space="preserve">
+    <value>Student ID (optional)</value>
+  </data>
+  <data name="Selecione um filtro" xml:space="preserve">
+    <value>Select a filter</value>
+  </data>
+  <data name="Plano" xml:space="preserve">
+    <value>Plan</value>
+  </data>
+  <data name="Mensal" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="Trimestral" xml:space="preserve">
+    <value>Quarterly</value>
+  </data>
+  <data name="Semestral" xml:space="preserve">
+    <value>Half-yearly</value>
+  </data>
+  <data name="Anual" xml:space="preserve">
+    <value>Yearly</value>
+  </data>
+  <data name="Mensal, Trimestral, Semestral ou Anual" xml:space="preserve">
+    <value>Monthly, Quarterly, Half-yearly or Yearly</value>
+  </data>
+  <data name="Data de início" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="Data final calculada" xml:space="preserve">
+    <value>Calculated end date</value>
+  </data>
+  <data name="Objetivo" xml:space="preserve">
+    <value>Goal</value>
+  </data>
+  <data name="Objetivo da matrícula" xml:space="preserve">
+    <value>Membership goal</value>
+  </data>
+  <data name="Observações de saúde" xml:space="preserve">
+    <value>Health notes</value>
+  </data>
+  <data name="Cuidados e observações sobre a saúde" xml:space="preserve">
+    <value>Health precautions and notes</value>
+  </data>
+  <data name="Restrições médicas — marque todas as aplicáveis" xml:space="preserve">
+    <value>Medical conditions — select all that apply</value>
+  </data>
+  <data name="Nenhuma Restrição" xml:space="preserve">
+    <value>No restrictions</value>
+  </data>
+  <data name="Diabetes" xml:space="preserve">
+    <value>Diabetes</value>
+  </data>
+  <data name="Pressão Alta" xml:space="preserve">
+    <value>High blood pressure</value>
+  </data>
+  <data name="Labirintite" xml:space="preserve">
+    <value>Labyrinthitis</value>
+  </data>
+  <data name="Alergias" xml:space="preserve">
+    <value>Allergies</value>
+  </data>
+  <data name="Problemas Respiratórios" xml:space="preserve">
+    <value>Respiratory problems</value>
+  </data>
+  <data name="Remédio Contínuo" xml:space="preserve">
+    <value>Continuous medication</value>
+  </data>
+  <data name="Selecione o aluno para verificar a exigência de laudo médico." xml:space="preserve">
+    <value>Select the student to check the medical clearance requirement.</value>
+  </data>
+  <data name="Laudo médico obrigatório para este aluno e as restrições selecionadas." xml:space="preserve">
+    <value>Medical clearance is required for this student and the selected conditions.</value>
+  </data>
+  <data name="Laudo médico opcional para aluno a partir de 16 anos sem restrições." xml:space="preserve">
+    <value>Medical clearance is optional for students aged 16 or older with no restrictions.</value>
+  </data>
+  <data name="Laudo médico anexado" xml:space="preserve">
+    <value>Medical clearance attached</value>
+  </data>
+  <data name="Nenhum laudo anexado" xml:space="preserve">
+    <value>No medical clearance attached</value>
+  </data>
+  <data name="Fotografar laudo" xml:space="preserve">
+    <value>Photograph medical clearance</value>
+  </data>
+  <data name="Selecionar imagem do laudo" xml:space="preserve">
+    <value>Select medical clearance image</value>
+  </data>
+  <data name="Remover laudo" xml:space="preserve">
+    <value>Remove medical clearance</value>
+  </data>
+  <data name="Salvar matrícula" xml:space="preserve">
+    <value>Save membership</value>
+  </data>
+  <data name="Matrícula salva." xml:space="preserve">
+    <value>Membership saved.</value>
+  </data>
+  <data name="Matrícula excluída." xml:space="preserve">
+    <value>Membership deleted.</value>
+  </data>
+  <data name="Excluir matrícula" xml:space="preserve">
+    <value>Delete membership</value>
+  </data>
+  <data name="Nenhuma matrícula encontrada." xml:space="preserve">
+    <value>No memberships found.</value>
+  </data>
+  <data name="Não informadas" xml:space="preserve">
+    <value>Not provided</value>
+  </data>
+  <data name="Sem laudo médico" xml:space="preserve">
+    <value>No medical clearance</value>
+  </data>
+  <data name="Ativa" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Agendada" xml:space="preserve">
+    <value>Scheduled</value>
+  </data>
+  <data name="Encerrada" xml:space="preserve">
+    <value>Expired</value>
+  </data>
+  <data name="Entrada e saída" xml:space="preserve">
+    <value>Check-in and check-out</value>
+  </data>
+  <data name="Pessoa" xml:space="preserve">
+    <value>Person</value>
+  </data>
+  <data name="CONTROLE DE ACESSO" xml:space="preserve">
+    <value>ACCESS CONTROL</value>
+  </data>
+  <data name="Cada visita, registrada." xml:space="preserve">
+    <value>Every visit, recorded.</value>
+  </data>
+  <data name="Busque a pessoa pelo CPF." xml:space="preserve">
+    <value>Find the person by CPF.</value>
+  </data>
+  <data name="Registrar entrada" xml:space="preserve">
+    <value>Check in</value>
+  </data>
+  <data name="Registrar saída" xml:space="preserve">
+    <value>Check out</value>
+  </data>
+  <data name="Registrar entrada ou saída" xml:space="preserve">
+    <value>Check in or out</value>
+  </data>
+  <data name="Histórico de visitas" xml:space="preserve">
+    <value>Visit history</value>
+  </data>
+  <data name="Nenhuma visita registrada." xml:space="preserve">
+    <value>No visits recorded.</value>
+  </data>
+  <data name="Na academia" xml:space="preserve">
+    <value>At the gym</value>
+  </data>
+  <data name="Fora da academia" xml:space="preserve">
+    <value>Outside the gym</value>
+  </data>
+  <data name="Em aberto" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Limite diário atingido. Registre a saída." xml:space="preserve">
+    <value>Daily limit reached. Please check out.</value>
+  </data>
+  <data name="Entrada registrada com sucesso." xml:space="preserve">
+    <value>Check-in recorded successfully.</value>
+  </data>
+  <data name="Saída registrada com sucesso." xml:space="preserve">
+    <value>Check-out recorded successfully.</value>
+  </data>
+  <data name="Relatórios" xml:space="preserve">
+    <value>Reports</value>
+  </data>
+  <data name="Atualizar relatório" xml:space="preserve">
+    <value>Refresh report</value>
+  </data>
+  <data name="Visão da academia" xml:space="preserve">
+    <value>Gym overview</value>
+  </data>
+  <data name="Horários mais procurados" xml:space="preserve">
+    <value>Busiest hours</value>
+  </data>
+  <data name="Horas trabalhadas por dia" xml:space="preserve">
+    <value>Hours worked per day</value>
+  </data>
+  <data name="Evolução dos contratos" xml:space="preserve">
+    <value>Membership trends</value>
+  </data>
+  <data name="Situação dos alunos matriculados até o fim de cada período; não inclui alunos que nunca se matricularam." xml:space="preserve">
+    <value>Membership status at the end of each period; excludes students who have never enrolled.</value>
+  </data>
+  <data name="Bem-vindo, {0}" xml:space="preserve">
+    <value>Welcome, {0}</value>
+  </data>
+  <data name="{0} pessoa(s) presentes" xml:space="preserve">
+    <value>{0} people inside</value>
+  </data>
+  <data name="{0} registro(s) encontrado(s)" xml:space="preserve">
+    <value>{0} record(s) found</value>
+  </data>
+  <data name="{0} cadastro(s) encontrado(s)" xml:space="preserve">
+    <value>{0} record(s) found</value>
+  </data>
+  <data name="{0} matrícula(s) encontrada(s)" xml:space="preserve">
+    <value>{0} membership(s) found</value>
+  </data>
+  <data name="{0}&#10;CPF: {1} · Nascimento: {2:d}" xml:space="preserve">
+    <value>{0}
+CPF: {1} · Birth date: {2:d}</value>
+  </data>
+  <data name="CPF: {0}&#10;Nascimento: {1:d}&#10;Telefone: {2}&#10;E-mail: {3}" xml:space="preserve">
+    <value>CPF: {0}
+Birth date: {1:d}
+Phone: {2}
+Email: {3}</value>
+  </data>
+  <data name="Contrato: {0:d} a {1:d}&#10;Objetivo: {2}" xml:space="preserve">
+    <value>Membership: {0:d} to {1:d}
+Goal: {2}</value>
+  </data>
+  <data name="Entrada: {0:g}&#10;Saída: {1}&#10;Permanência: {2}" xml:space="preserve">
+    <value>Check-in: {0:g}
+Check-out: {1}
+Time at the gym: {2}</value>
+  </data>
+  <data name="Tempo acumulado hoje: {0}" xml:space="preserve">
+    <value>Total time today: {0}</value>
+  </data>
+  <data name="Permanência nesta visita: {0}" xml:space="preserve">
+    <value>Time on this visit: {0}</value>
+  </data>
+  <data name="Limite diário: {0} · Disponível: {1}" xml:space="preserve">
+    <value>Daily limit: {0} · Remaining: {1}</value>
+  </data>
+  <data name="Plano válido até {0:d} · {1} dia(s) restante(s)" xml:space="preserve">
+    <value>Membership valid until {0:d} · {1} day(s) remaining</value>
+  </data>
+  <data name="Permanência: {0}&#10;Total do dia: {1}" xml:space="preserve">
+    <value>Time at the gym: {0}
+Daily total: {1}</value>
+  </data>
+  <data name="Entradas de alunos: {0}&#10;Entradas de colaboradores: {1}&#10;Pessoas na academia agora: {2}&#10;Permanência média de alunos: {3}" xml:space="preserve">
+    <value>Student check-ins: {0}
+Employee check-ins: {1}
+People at the gym now: {2}
+Average student visit: {3}</value>
+  </data>
+  <data name="{0:00}h — {1} entrada(s)" xml:space="preserve">
+    <value>{0:00}h — {1} check-in(s)</value>
+  </data>
+  <data name="{0} · {1:d} · {2}" xml:space="preserve">
+    <value>{0} · {1:d} · {2}</value>
+  </data>
+  <data name="{0:MMM yyyy}&#10;Com contrato vigente: {1}&#10;Sem contrato vigente: {2}&#10;Retenção contratual: {3:P0}" xml:space="preserve">
+    <value>{0:MMM yyyy}
+Active membership: {1}
+No active membership: {2}
+Membership retention: {3:P0}</value>
+  </data>
+  <data name="A data de início ultrapassa o período permitido para o plano." xml:space="preserve">
+    <value>The start date exceeds the allowed plan period.</value>
+  </data>
+  <data name="A saída já foi registrada." xml:space="preserve">
+    <value>Check-out has already been recorded.</value>
+  </data>
+  <data name="A saída não pode ser anterior à entrada." xml:space="preserve">
+    <value>Check-out cannot be earlier than check-in.</value>
+  </data>
+  <data name="Aluno não encontrado. Busque um aluno cadastrado pelo CPF." xml:space="preserve">
+    <value>Student not found. Find a registered student by CPF.</value>
+  </data>
+  <data name="Aluno sem matrícula ativa. Não é possível registrar a entrada." xml:space="preserve">
+    <value>Student has no active membership. Check-in is not allowed.</value>
+  </data>
+  <data name="Bairro não pode ser vazio." xml:space="preserve">
+    <value>District cannot be empty.</value>
+  </data>
+  <data name="CEP não pode ser vazio." xml:space="preserve">
+    <value>Postal code cannot be empty.</value>
+  </data>
+  <data name="CPF já cadastrado." xml:space="preserve">
+    <value>CPF is already registered.</value>
+  </data>
+  <data name="CPF já cadastrado. Use a opção de configurar o cadastro existente." xml:space="preserve">
+    <value>CPF is already registered. Use the existing account setup option.</value>
+  </data>
+  <data name="CPF ou senha inválidos." xml:space="preserve">
+    <value>Invalid CPF or password.</value>
+  </data>
+  <data name="Cadastro não encontrado." xml:space="preserve">
+    <value>Registration not found.</value>
+  </data>
+  <data name="Cidade não pode ser vazia." xml:space="preserve">
+    <value>City cannot be empty.</value>
+  </data>
+  <data name="Falha na atualização dos vínculos do banco de dados." xml:space="preserve">
+    <value>Unable to update database relationships.</value>
+  </data>
+  <data name="E-mail já cadastrado." xml:space="preserve">
+    <value>Email is already registered.</value>
+  </data>
+  <data name="Faça login para continuar." xml:space="preserve">
+    <value>Sign in to continue.</value>
+  </data>
+  <data name="Informe a data de início." xml:space="preserve">
+    <value>Enter the start date.</value>
+  </data>
+  <data name="Informe e confirme uma senha com pelo menos 6 caracteres." xml:space="preserve">
+    <value>Enter and confirm a password of at least 6 characters.</value>
+  </data>
+  <data name="Informe o CPF completo com 11 dígitos." xml:space="preserve">
+    <value>Enter the full 11-digit CPF.</value>
+  </data>
+  <data name="Informe o CEP completo com 8 dígitos." xml:space="preserve">
+    <value>Enter the full 8-digit postal code.</value>
+  </data>
+  <data name="Informe o tipo da pessoa." xml:space="preserve">
+    <value>Select the person type.</value>
+  </data>
+  <data name="Informe um número de dias válido, maior ou igual a zero." xml:space="preserve">
+    <value>Enter a valid number of days greater than or equal to zero.</value>
+  </data>
+  <data name="Informe um período válido de até 366 dias." xml:space="preserve">
+    <value>Enter a valid period of up to 366 days.</value>
+  </data>
+  <data name="Já existe um administrador cadastrado. Faça login para continuar." xml:space="preserve">
+    <value>An administrator already exists. Sign in to continue.</value>
+  </data>
+  <data name="Já existe um administrador ou o cadastro não possui vínculo CLT." xml:space="preserve">
+    <value>An administrator already exists or this account is not a CLT employee.</value>
+  </data>
+  <data name="Já existe uma entrada em aberto. Registre a saída antes de entrar novamente." xml:space="preserve">
+    <value>There is already an open check-in. Check out before checking in again.</value>
+  </data>
+  <data name="Laudo médico obrigatório para menores de 16 anos ou alunos com restrições médicas." xml:space="preserve">
+    <value>Medical clearance is required for students under 16 or with medical conditions.</value>
+  </data>
+  <data name="Matrícula não encontrada." xml:space="preserve">
+    <value>Membership not found.</value>
+  </data>
+  <data name="Não existe entrada em aberto para registrar a saída." xml:space="preserve">
+    <value>There is no open check-in to check out.</value>
+  </data>
+  <data name="O administrador deve ter vínculo CLT." xml:space="preserve">
+    <value>Administrators must have a CLT contract.</value>
+  </data>
+  <data name="O aluno já possui uma matrícula vigente ou agendada. Aguarde o encerramento ou exclua a matrícula existente." xml:space="preserve">
+    <value>The student already has an active or scheduled membership. Wait until it expires or delete the existing membership.</value>
+  </data>
+  <data name="O cadastro possui registros vinculados, como matrículas. Remova os vínculos antes de excluí-lo." xml:space="preserve">
+    <value>This record has linked records, such as memberships. Remove the links before deleting it.</value>
+  </data>
+  <data name="O laudo deve ter no máximo 10 MB." xml:space="preserve">
+    <value>Medical clearance must not exceed 10 MB.</value>
+  </data>
+  <data name="O limite diário de trabalho foi atingido. Não é possível registrar nova entrada hoje." xml:space="preserve">
+    <value>The daily work limit has been reached. No further check-ins are allowed today.</value>
+  </data>
+  <data name="O relógio do dispositivo é anterior ao último registro." xml:space="preserve">
+    <value>The device clock is earlier than the last record.</value>
+  </data>
+  <data name="Restrições médicas inválidas." xml:space="preserve">
+    <value>Invalid medical conditions.</value>
+  </data>
+  <data name="Selecione um logradouro cadastrado." xml:space="preserve">
+    <value>Select a registered address.</value>
+  </data>
+  <data name="Selecione um logradouro." xml:space="preserve">
+    <value>Select an address.</value>
+  </data>
+  <data name="Selecione um plano válido." xml:space="preserve">
+    <value>Select a valid plan.</value>
+  </data>
+  <data name="Senha atual inválida." xml:space="preserve">
+    <value>Incorrect current password.</value>
+  </data>
+  <data name="Senha deve possuir pelo menos 6 caracteres." xml:space="preserve">
+    <value>Password must contain at least 6 characters.</value>
+  </data>
+  <data name="Seu perfil não possui permissão para esta operação." xml:space="preserve">
+    <value>Your profile does not have permission for this operation.</value>
+  </data>
+  <data name="Tipo de pessoa inválido." xml:space="preserve">
+    <value>Invalid person type.</value>
+  </data>
+  <data name="Busque a pessoa pelo CPF antes de registrar o acesso." xml:space="preserve">
+    <value>Find the person by CPF before recording access.</value>
+  </data>
+  <data name="Busque o aluno pelo CPF antes de salvar." xml:space="preserve">
+    <value>Find the student by CPF before saving.</value>
+  </data>
+  <data name="O CEP foi alterado. Use Buscar CEP ou selecione o logradouro correto antes de salvar." xml:space="preserve">
+    <value>The postal code changed. Find the postal code or select the correct address before saving.</value>
+  </data>
+  <data name="Escolha uma foto de até 10 MB." xml:space="preserve">
+    <value>Choose a photo up to 10 MB.</value>
+  </data>
+  <data name="A foto selecionada está vazia." xml:space="preserve">
+    <value>The selected photo is empty.</value>
+  </data>
+  <data name="Este dispositivo não oferece captura por câmera." xml:space="preserve">
+    <value>This device does not support camera capture.</value>
+  </data>
+  <data name="Autorize a câmera nas configurações do aplicativo para tirar a foto." xml:space="preserve">
+    <value>Allow camera access in app settings to take a photo.</value>
+  </data>
+  <data name="Tire ou selecione uma foto para o cadastro." xml:space="preserve">
+    <value>Take or select a photo for this registration.</value>
+  </data>
+  <data name="A senha e a confirmação devem ser iguais." xml:space="preserve">
+    <value>Password and confirmation must match.</value>
+  </data>
+  <data name="Informe uma senha com pelo menos 6 caracteres." xml:space="preserve">
+    <value>Enter a password of at least 6 characters.</value>
+  </data>
+  <data name="Informe um ID inteiro maior que zero." xml:space="preserve">
+    <value>Enter an integer ID greater than zero.</value>
+  </data>
+  <data name="Informe um tipo ou vínculo válido, conforme as opções do cadastro." xml:space="preserve">
+    <value>Enter a valid role or employment type from the registration options.</value>
+  </data>
+  <data name="Selecione um filtro válido." xml:space="preserve">
+    <value>Select a valid filter.</value>
+  </data>
+  <data name="CEP não encontrado. Cadastre o logradouro no menu Logradouros." xml:space="preserve">
+    <value>Postal code not found. Register the address in the Addresses menu.</value>
+  </data>
+  <data name="Este logradouro está vinculado a um aluno ou colaborador. Altere o endereço desses cadastros antes de excluí-lo." xml:space="preserve">
+    <value>This address is linked to a student or employee. Change their address before deleting it.</value>
+  </data>
+  <data name="CPF deve possuir 11 dígitos." xml:space="preserve">
+    <value>CPF must contain 11 digits.</value>
+  </data>
+  <data name="Senha é obrigatória." xml:space="preserve">
+    <value>Password is required.</value>
+  </data>
+  <data name="E-mail é obrigatório." xml:space="preserve">
+    <value>Email is required.</value>
+  </data>
+  <data name="E-mail inválido." xml:space="preserve">
+    <value>Invalid email.</value>
+  </data>
+  <data name="Informe o nome completo." xml:space="preserve">
+    <value>Enter the full name.</value>
+  </data>
+  <data name="Informe o número do endereço." xml:space="preserve">
+    <value>Enter the address number.</value>
+  </data>
+  <data name="Informe a data de nascimento." xml:space="preserve">
+    <value>Enter the date of birth.</value>
+  </data>
+  <data name="Informe a data de admissão." xml:space="preserve">
+    <value>Enter the hire date.</value>
+  </data>
+  <data name="A admissão não pode ser uma data futura." xml:space="preserve">
+    <value>Hire date cannot be in the future.</value>
+  </data>
+  <data name="Informe o objetivo da matrícula." xml:space="preserve">
+    <value>Enter the membership goal.</value>
+  </data>
+  <data name="Excluir {0} (CPF {1})?" xml:space="preserve">
+    <value>Delete {0} (CPF {1})?</value>
+  </data>
+  <data name="{0} · {1} · Admissão: {2:d}" xml:space="preserve">
+    <value>{0} · {1} · Hired: {2:d}</value>
+  </data>
+  <data name="Rua: {0}&#10;Bairro: {1}&#10;Cidade: {2} / {3}&#10;País: {4}" xml:space="preserve">
+    <value>Street: {0}
+District: {1}
+City: {2} / {3}
+Country: {4}</value>
+  </data>
+  <data name="Excluir a matrícula {0} de {1}?" xml:space="preserve">
+    <value>Delete membership {0} for {1}?</value>
+  </data>
+  <data name="Matrícula: {0} · Aluno: {1}&#10;CPF: {2} · Nascimento: {3:d}" xml:space="preserve">
+    <value>Membership: {0} · Student: {1}
+CPF: {2} · Born: {3:d}</value>
+  </data>
+  <data name="{0} · {1:d} a {2:d} · {3}&#10;Objetivo: {4}" xml:space="preserve">
+    <value>{0} · {1:d} to {2:d} · {3}
+Goal: {4}</value>
+  </data>
+  <data name="Restrições: " xml:space="preserve">
+    <value>Restrictions: </value>
+  </data>
+  <data name="Observações: " xml:space="preserve">
+    <value>Notes: </value>
+  </data>
+  <data name="{0}&#10;Aluno ID: {1} · CPF: {2}&#10;Nascimento: {3:d}" xml:space="preserve">
+    <value>{0}
+Student ID: {1} · CPF: {2}
+Born: {3:d}</value>
+  </data>
+  <data name="Deseja excluir '{0}'?" xml:space="preserve">
+    <value>Delete '{0}'?</value>
+  </data>
+  <data name="Visitas registradas: {0}&#10;Permanência total: {1}&#10;Média das visitas concluídas: {2}" xml:space="preserve">
+    <value>Recorded visits: {0}
+Total time: {1}
+Average completed visit: {2}</value>
+  </data>
+</root>

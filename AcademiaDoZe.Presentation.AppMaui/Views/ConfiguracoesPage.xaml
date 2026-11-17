@@ -1,48 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:AcademiaDoZe.Presentation.AppMaui.ViewModels"
-             x:Class="AcademiaDoZe.Presentation.AppMaui.Views.ConfiguracoesPage"
-             x:DataType="vm:ConfiguracoesViewModel"
-             Title="Configurações">
-
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
-
-            <Label Text="Configurações do Sistema" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" />
-
-            <!-- SEÇÃO TEMA -->
-            <Border StrokeShape="RoundRectangle 10" Padding="15">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Tema do Aplicativo" FontSize="18" FontAttributes="Bold" />
-
-                    <HorizontalStackLayout Spacing="10">
-                        <Button Text="Claro" Command="{Binding SalvarTemaCommand}" CommandParameter="Light" />
-                        <Button Text="Escuro" Command="{Binding SalvarTemaCommand}" CommandParameter="Dark" />
-                        <Button Text="Sistema" Command="{Binding SalvarTemaCommand}" CommandParameter="System" />
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Border>
-
-            <!-- SEÇÃO BANCO DE DADOS -->
-            <Border StrokeShape="RoundRectangle 10" Padding="15">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Banco de Dados" FontSize="18" FontAttributes="Bold" />
-
-                    <Picker SelectedItem="{Binding ProvedorBanco}">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>SQLite</x:String>
-                                <x:String>MySQL</x:String>
-                                <x:String>SQL Server</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-
-                    <Button Text="Salvar Credenciais" Command="{Binding SalvarBancoCommand}" />
-                </VerticalStackLayout>
-            </Border>
-
-        </VerticalStackLayout>
-    </ScrollView>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+ x:Class="AcademiaDoZe.Presentation.AppMaui.Views.ConfiguracoesPage" Title="Configurações">
+ <ScrollView><VerticalStackLayout Padding="24" Spacing="20" MaximumWidthRequest="900">
+  <Label Text="Do seu jeito" FontSize="28" FontAttributes="Bold" />
+  <Label Text="Personalize sua experiência na academia." />
+  <Border Padding="20"><VerticalStackLayout Spacing="12">
+   <Label Text="Idioma" FontSize="20" FontAttributes="Bold" />
+   <Picker x:Name="IdiomaPicker" Title="Idioma" SelectedIndexChanged="IdiomaChanged">
+    <Picker.Items><x:String>Português (Brasil)</x:String><x:String>English (US)</x:String><x:String>Español (España)</x:String></Picker.Items>
+   </Picker>
+   <Label Text="A alteração é aplicada imediatamente e salva neste dispositivo." FontSize="13" />
+  </VerticalStackLayout></Border>
+  <Border Padding="20"><VerticalStackLayout Spacing="12">
+   <Label Text="Aparência" FontSize="20" FontAttributes="Bold" />
+   <Button Text="Claro" Clicked="TemaClaro" /><Button Text="Escuro" Clicked="TemaEscuro" /><Button Text="Sistema" Clicked="TemaSistema" />
+  </VerticalStackLayout></Border>
+  <Border Padding="20"><VerticalStackLayout Spacing="8">
+   <Label Text="Armazenamento" FontSize="20" FontAttributes="Bold" />
+   <Label Text="SQLite local — seus cadastros são mantidos neste dispositivo." />
+  </VerticalStackLayout></Border>
+ </VerticalStackLayout></ScrollView>
 </ContentPage>

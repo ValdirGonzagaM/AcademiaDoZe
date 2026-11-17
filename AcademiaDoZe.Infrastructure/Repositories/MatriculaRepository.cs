@@ -83,7 +83,7 @@ public class MatriculaRepository : BaseRepository, IMatriculaRepository
         string nome = reader.GetStringValue("aluno_nome");
         DateOnly nascimento = reader.GetDateOnlyValue("nascimento");
         string telefone = reader.GetStringValue("telefone");
-        string email = reader.GetStringValue("email");
+        string email = reader.GetNullableString("email") ?? "";
         string numero = reader.GetStringValue("numero");
         string? complemento = reader.GetNullableString("complemento");
         string senha = reader.GetStringValue("senha");

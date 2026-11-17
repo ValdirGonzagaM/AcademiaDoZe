@@ -20,7 +20,7 @@ public sealed class MatriculaPage : ContentPage
     private readonly Label _alunoDados = new() { Text = "Busque um aluno cadastrado pelo CPF.", AutomationId = "AlunoMatricula" };
     private readonly Image _fotoAluno = new() { HeightRequest = 100, Aspect = Aspect.AspectFit, Source = "logo_aluno.png" };
     private readonly Picker _plano = new() { Title = "Plano", ItemsSource = Enum.GetValues<AppMatriculaPlano>(), ItemDisplayBinding = new Binding(".", converter: new EnumDisplayConverter()), SelectedIndex = 0 };
-    private readonly DatePicker _inicio = new() { Date = DateTime.Today, Format = "dd/MM/yyyy", AutomationId = "InicioMatricula" };
+    private readonly DatePicker _inicio = new() { Date = DateTime.Today, Format = "d", AutomationId = "InicioMatricula" };
     private readonly Label _fim = new() { AutomationId = "FimMatricula" };
     private readonly Entry _objetivo = new() { Placeholder = "Objetivo da matrícula", MaxLength = 200, AutomationId = "ObjetivoMatricula" };
     private readonly Editor _observacoes = new() { Placeholder = "Cuidados e observações sobre a saúde", HeightRequest = 100, MaxLength = 500 };
@@ -48,7 +48,7 @@ public sealed class MatriculaPage : ContentPage
             var check = new CheckBox { AutomationId = "Restricao" + valor };
             _restricoes.Add(valor, check);
             check.CheckedChanged += (_, _) => AtualizarExigencia();
-            _form.Children.Add(new HorizontalStackLayout { Spacing = 8, Children = { check, new Label { Text = valor.GetDisplayName(), VerticalOptions = LayoutOptions.Center } } });
+            _form.Children.Add(new HorizontalStackLayout { Spacing = 8, Children = { check, new Label { Text = Texto.T(valor.GetDisplayName()), VerticalOptions = LayoutOptions.Center } } });
         }
         Campo("Observações de saúde", _observacoes);
         _form.Children.Add(_exigencia); _form.Children.Add(_statusLaudo); _form.Children.Add(_imagemLaudo);
@@ -86,14 +86,14 @@ public sealed class MatriculaPage : ContentPage
         try
         {
             _fim.Text = _inicio.Date is DateTime data && _plano.SelectedItem is AppMatriculaPlano plano
-                ? MatriculaPeriodo.CalcularFim(plano, DateOnly.FromDateTime(data)).ToString("dd/MM/yyyy") : "Informe o plano e a data de início.";
+                ? MatriculaPeriodo.CalcularFim(plano, DateOnly.FromDateTime(data)).ToString("d") : "Informe o plano e a data de início.";
         }
         catch (ArgumentException ex) { _fim.Text = ex.Message; }
     }
     private void AtualizarAluno()
     {
         _alunoDados.Text = _aluno == null ? "Busque um aluno cadastrado pelo CPF."
-            : $"{_aluno.Nome}\nAluno ID: {_aluno.Id} · CPF: {_aluno.Cpf}\nNascimento: {_aluno.DataNascimento:dd/MM/yyyy}";
+            : Texto.F("{0}\nAluno ID: {1} · CPF: {2}\nNascimento: {3:d}", _aluno.Nome, _aluno.Id, _aluno.Cpf, _aluno.DataNascimento);
         var bytes = _aluno?.Foto?.Conteudo;
         _fotoAluno.Source = bytes is { Length: > 0 } ? ImageSource.FromStream(() => new MemoryStream(bytes)) : "logo_aluno.png";
         AtualizarExigencia();
@@ -146,7 +146,7 @@ public sealed class MatriculaPage : ContentPage
             LaudoMedico = _laudo is { Length: > 0 } ? new ArquivoDto { Conteudo = _laudo } : null
         };
         if (_id == 0) await _matriculas.AdicionarAsync(dto); else await _matriculas.AtualizarAsync(dto);
-        await DisplayAlertAsync("Sucesso", "Matrícula salva.", "OK");
+        await this.AvisoAsync("Sucesso", "Matrícula salva.", "OK");
         await Navigation.PopAsync();
     });
     private async Task ExecutarAsync(Func<Task> acao)
@@ -154,7 +154,7 @@ public sealed class MatriculaPage : ContentPage
         if (_ocupado) return;
         _ocupado = true; _form.IsEnabled = false; _erro.Text = "";
         try { await acao(); }
-        catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); _erro.Text = ex.Message; await DisplayAlertAsync("Atenção", ex.Message, "OK"); }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); _erro.Text = ex.Message; await this.AvisoAsync("Atenção", ex.Message, "OK"); }
         finally { _ocupado = false; _form.IsEnabled = true; }
     }
 }

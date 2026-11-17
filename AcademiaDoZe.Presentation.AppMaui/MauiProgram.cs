@@ -20,6 +20,11 @@ public static class MauiProgram
 
         ConfigurationHelper.ConfigureServices(builder.Services);
 
+        builder.Services.AddSingleton<AppShell>();
+        builder.Services.AddTransient<LoginPage>();
+        builder.Services.AddTransient<AcessoPage>();
+        builder.Services.AddTransient<RelatoriosPage>();
+        builder.Services.AddTransient<MinhaContaPage>();
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<MatriculaListPage>();
         builder.Services.AddTransient<Services.MatriculaConsulta>();
@@ -28,11 +33,14 @@ public static class MauiProgram
         builder.Services.AddTransient<ColaboradorListPage>();
         builder.Services.AddTransient<AlunoListPage>();
 
+#if WINDOWS
+        Microsoft.Maui.Handlers.DatePickerHandler.Mapper.AppendToMapping("Idioma", (handler, view) => handler.PlatformView.Language = Localizador.Atual.Cultura.Name);
+#endif
+
         // ViewModels
         builder.Services.AddTransient<DashboardListViewModel>();
         builder.Services.AddTransient<LogradouroListViewModel>();
         builder.Services.AddTransient<LogradouroViewModel>();
-        builder.Services.AddTransient<ConfiguracoesViewModel>();
         builder.Services.AddTransient<ConfiguracoesPage>();
 
         // Views

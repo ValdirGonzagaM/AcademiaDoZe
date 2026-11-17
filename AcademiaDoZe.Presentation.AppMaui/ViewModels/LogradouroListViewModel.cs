@@ -22,11 +22,16 @@ public partial class LogradouroListViewModel : ObservableObject
     [ObservableProperty]
     private bool _isRefreshing;
 
+    public string QuantidadeTexto => Texto.F("{0} registro(s) encontrado(s)", Logradouros.Count);
+    public string[] Filtros { get; } = ["Nome", "Cep", "Cidade", "Id"];
+    public void AtualizarIdioma() => OnPropertyChanged(nameof(QuantidadeTexto));
+
     public ObservableCollection<LogradouroDto> Logradouros { get; } = new();
 
     public LogradouroListViewModel(ILogradouroService logradouroService)
     {
         _logradouroService = logradouroService;
+        Logradouros.CollectionChanged += (_, _) => AtualizarIdioma();
     }
 
     [RelayCommand]
@@ -54,7 +59,7 @@ public partial class LogradouroListViewModel : ObservableObject
                 var cepLimpo = new string(SearchText.Where(char.IsDigit).ToArray());
                 if (cepLimpo.Length != 8)
                 {
-                    await Shell.Current.DisplayAlertAsync("Validação", "Para buscar por CEP, informe um CEP válido com 8 dígitos.", "OK");
+                    await Shell.Current.AvisoAsync("Validação", "Para buscar por CEP, informe um CEP válido com 8 dígitos.", "OK");
                     return;
                 }
                 var logradouro = await _logradouroService.ObterPorCepAsync(cepLimpo, cts.Token);
@@ -73,7 +78,7 @@ public partial class LogradouroListViewModel : ObservableObject
             }
             else
             {
-                await Shell.Current.DisplayAlertAsync("Validação", "Informe um ID numérico maior que zero.", "OK");
+                await Shell.Current.AvisoAsync("Validação", "Informe um ID numérico maior que zero.", "OK");
                 return;
             }
 
@@ -88,11 +93,11 @@ public partial class LogradouroListViewModel : ObservableObject
         }
         catch (OperationCanceledException)
         {
-            await Shell.Current.DisplayAlertAsync("Tempo Esgotado", "A conexão expirou.", "OK");
+            await Shell.Current.AvisoAsync("Tempo Esgotado", "A conexão expirou.", "OK");
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlertAsync("Erro", $"Erro ao buscar logradouros: {ex.Message}", "OK");
+            await Shell.Current.AvisoAsync("Erro", ex.Message, "OK");
         }
         finally
         {
@@ -129,17 +134,17 @@ public partial class LogradouroListViewModel : ObservableObject
         IsBusy = true;
         try
         {
-            bool confirm = await Shell.Current.DisplayAlertAsync("Confirmação", $"Deseja excluir '{logradouro.Nome}'?", "Excluir", "Cancelar");
+            bool confirm = await Shell.Current.AvisoAsync("Confirmação", Texto.F("Deseja excluir '{0}'?", logradouro.Nome), "Excluir", "Cancelar");
             if (!confirm) return;
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             if (!await _logradouroService.RemoverAsync(logradouro.Id, cts.Token))
                 throw new KeyNotFoundException("O logradouro não foi encontrado. Atualize a busca.");
             Logradouros.Remove(logradouro);
-            await Shell.Current.DisplayAlertAsync("Sucesso", "Logradouro excluído!", "OK");
+            await Shell.Current.AvisoAsync("Sucesso", "Logradouro excluído!", "OK");
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlertAsync("Atenção", ex.Message, "OK");
+            await Shell.Current.AvisoAsync("Atenção", ex.Message, "OK");
         }
         finally { IsBusy = false; }
     }

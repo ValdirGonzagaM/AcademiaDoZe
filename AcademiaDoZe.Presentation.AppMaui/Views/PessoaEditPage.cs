@@ -21,8 +21,8 @@ public sealed class PessoaEditPage : ContentPage
     private readonly Entry _confirmarSenha = new() { Placeholder = "Confirme a senha", IsPassword = true, AutomationId = "ConfirmarSenhaPessoa" };
     private readonly Entry _cep = new() { Placeholder = "CEP (8 dígitos)", Keyboard = Keyboard.Numeric, AutomationId = "CepPessoa" };
     private readonly Label _enderecoDetalhes = new() { Text = "Selecione um logradouro ou busque pelo CEP.", AutomationId = "EnderecoPessoa" };
-    private readonly DatePicker _nascimento = new() { Date = DateTime.Today.AddYears(-18), MaximumDate = DateTime.Today, Format = "dd/MM/yyyy" };
-    private readonly DatePicker _admissao = new() { Date = DateTime.Today, MaximumDate = DateTime.Today, Format = "dd/MM/yyyy" };
+    private readonly DatePicker _nascimento = new() { Date = DateTime.Today.AddYears(-18), MaximumDate = DateTime.Today, Format = "d" };
+    private readonly DatePicker _admissao = new() { Date = DateTime.Today, MaximumDate = DateTime.Today, Format = "d" };
     private readonly Picker _logradouro = new() { Title = "Selecione o logradouro", ItemDisplayBinding = new Binding(nameof(LogradouroDto.Nome)) };
     private readonly Picker _tipo = new() { Title = "Tipo", ItemsSource = Enum.GetValues<AppColaboradorTipo>(), ItemDisplayBinding = new Binding(".", converter: new EnumDisplayConverter()), SelectedIndex = 1 };
     private readonly Picker _vinculo = new() { Title = "Vínculo", ItemsSource = Enum.GetValues<AppColaboradorVinculo>(), ItemDisplayBinding = new Binding(".", converter: new EnumDisplayConverter()), SelectedIndex = 0 };
@@ -31,11 +31,14 @@ public sealed class PessoaEditPage : ContentPage
     private readonly Label _erro = new() { TextColor = Color.FromArgb("#A33232"), AutomationId = "ErroCadastro" };
     private readonly VerticalStackLayout _form = new() { Padding = DeviceInfo.Idiom == DeviceIdiom.Phone ? 16 : 28, Spacing = 12, MaximumWidthRequest = 960 };
     private byte[]? _fotoBytes;
+    private readonly bool _configuracaoInicial;
     private bool _ocupado;
     private bool _loaded;
 
-    public PessoaEditPage(PessoaCadastro cadastro, FotoService fotos, bool colaborador, PessoaDto? pessoa = null)
+    public PessoaEditPage(PessoaCadastro cadastro, FotoService fotos, bool colaborador, PessoaDto? pessoa = null, bool configuracaoInicial = false)
     {
+        _configuracaoInicial = configuracaoInicial;
+        if (configuracaoInicial) { _tipo.SelectedItem = AppColaboradorTipo.Administrador; _vinculo.SelectedItem = AppColaboradorVinculo.CLT; _tipo.IsEnabled = _vinculo.IsEnabled = false; }
         _cadastro = cadastro; _fotos = fotos; _colaborador = colaborador; _original = pessoa;
         Title = (pessoa == null ? "Novo " : "Editar ") + (colaborador ? "colaborador" : "aluno");
         if (pessoa != null) CarregarPessoa(pessoa);
@@ -58,7 +61,7 @@ public sealed class PessoaEditPage : ContentPage
         _form.Children.Add(new HorizontalStackLayout { HorizontalOptions = LayoutOptions.Center, Spacing = 12, Children = { camera, galeria } });
         Campo("CPF", _cpf); _form.Children.Add(buscarCpf);
         Campo("Nome completo", _nome); Campo("Nascimento", _nascimento);
-        Campo("Telefone", _telefone); Campo("E-mail", _email);
+        Campo("Telefone", _telefone); Campo(colaborador ? "E-mail" : "E-mail (opcional)", _email);
         Campo("CEP", _cep); _form.Children.Add(buscarCep);
         Campo("Logradouro", _logradouro); _form.Children.Add(_enderecoDetalhes);
         _form.Children.Add(new Label { Text = "Cadastre o endereço no menu Logradouros antes de selecionar.", FontSize = 12 });
@@ -96,7 +99,7 @@ public sealed class PessoaEditPage : ContentPage
         if (_logradouro.SelectedItem is LogradouroDto endereco)
         {
             _cep.Text = endereco.Cep;
-            _enderecoDetalhes.Text = $"Rua: {endereco.Nome}\nBairro: {endereco.Bairro}\nCidade: {endereco.Cidade} / {endereco.Estado}\nPaís: {endereco.Pais}";
+            _enderecoDetalhes.Text = Texto.F("Rua: {0}\nBairro: {1}\nCidade: {2} / {3}\nPaís: {4}", endereco.Nome, endereco.Bairro, endereco.Cidade, endereco.Estado, endereco.Pais);
         }
         else _enderecoDetalhes.Text = "Selecione um logradouro cadastrado ou busque pelo CEP.";
     }
@@ -105,10 +108,10 @@ public sealed class PessoaEditPage : ContentPage
         var pessoa = await _cadastro.PorCpfAsync(_colaborador, _cpf.Text ?? "");
         if (pessoa == null)
         {
-            await DisplayAlertAsync("Busca por CPF", "CPF não encontrado. Você pode preencher um novo cadastro.", "OK");
+            await this.AvisoAsync("Busca por CPF", "CPF não encontrado. Você pode preencher um novo cadastro.", "OK");
             return;
         }
-        if (!await DisplayAlertAsync("Cadastro encontrado", "Carregar os dados para edição? Isso substituirá os campos e a foto deste formulário.", "Carregar", "Cancelar")) return;
+        if (!await this.AvisoAsync("Cadastro encontrado", "Carregar os dados para edição? Isso substituirá os campos e a foto deste formulário.", "Carregar", "Cancelar")) return;
         _logradouro.ItemsSource = (await _cadastro.LogradourosAsync()).ToList();
         CarregarPessoa(pessoa);
     });
@@ -169,8 +172,8 @@ public sealed class PessoaEditPage : ContentPage
         pessoa.Id = _original?.Id ?? 0; pessoa.Email = _email.Text?.Trim(); pessoa.Endereco = endereco;
         pessoa.Complemento = _complemento.Text; pessoa.Senha = _senha.Text;
         pessoa.Foto = new ArquivoDto { Conteudo = _fotoBytes };
-        await _cadastro.SalvarAsync(pessoa);
-        await DisplayAlertAsync("Cadastro salvo", "Dados e foto foram salvos com sucesso.", "OK");
+        await _cadastro.SalvarAsync(pessoa, _configuracaoInicial);
+        await this.AvisoAsync("Cadastro salvo", "Dados e foto foram salvos com sucesso.", "OK");
         await Navigation.PopAsync();
     });
     private async Task ExecutarAsync(Func<Task> action)
@@ -182,7 +185,7 @@ public sealed class PessoaEditPage : ContentPage
         {
             System.Diagnostics.Debug.WriteLine($"[PessoaEditPage] {ex}");
             _erro.Text = ex.Message;
-            await DisplayAlertAsync("Atenção", ex.Message, "OK");
+            await this.AvisoAsync("Atenção", ex.Message, "OK");
         }
         finally { _ocupado = false; _form.IsEnabled = true; }
     }

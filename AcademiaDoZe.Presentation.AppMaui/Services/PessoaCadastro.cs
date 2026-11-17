@@ -7,7 +7,7 @@ using AcademiaDoZe.Application.Interfaces;
 namespace AcademiaDoZe.Presentation.AppMaui.Services;
 
 // Fluxo compartilhado; cada entidade mantém seus serviços e repositórios próprios.
-public sealed class PessoaCadastro(IAlunoService alunos, IColaboradorService colaboradores, ILogradouroService logradouros)
+public sealed class PessoaCadastro(IAlunoService alunos, IColaboradorService colaboradores, ILogradouroService logradouros, AcademiaDoZe.Application.Services.AutenticacaoService? autenticacao = null)
 {
     public Task<IEnumerable<LogradouroDto>> LogradourosAsync() => logradouros.ObterTodosAsync();
     public async Task<PessoaDto?> PorIdAsync(bool colaborador, int id) => colaborador
@@ -78,8 +78,13 @@ public sealed class PessoaCadastro(IAlunoService alunos, IColaboradorService col
             throw new ArgumentException("Informe uma senha com pelo menos 6 caracteres.");
         if (senha != confirmacao) throw new ArgumentException("A senha e a confirmação devem ser iguais.");
     }
-    public async Task<PessoaDto> SalvarAsync(PessoaDto pessoa)
+    public async Task<PessoaDto> SalvarAsync(PessoaDto pessoa, bool configuracaoInicial = false)
     {
+        if (configuracaoInicial)
+        {
+            if (autenticacao == null || pessoa is not ColaboradorDto primeiro) throw new InvalidOperationException("Configuração inicial indisponível.");
+            return await autenticacao.CriarPrimeiroAdministradorAsync(primeiro);
+        }
         if (pessoa is ColaboradorDto colaborador)
             return pessoa.Id == 0 ? await colaboradores.AdicionarAsync(colaborador) : await colaboradores.AtualizarAsync(colaborador);
         var aluno = (AlunoDto)pessoa;

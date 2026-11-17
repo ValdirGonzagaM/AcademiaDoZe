@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -43,7 +43,7 @@ public class AcessoColaborador : Entity
 
         var acesso = new AcessoColaborador(
             id,
-            colaborador,
+            colaborador!,
             dataHora);
 
         return Result<AcessoColaborador>.Success(acesso);

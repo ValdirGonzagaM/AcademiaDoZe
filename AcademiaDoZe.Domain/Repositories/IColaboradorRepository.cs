@@ -5,6 +5,9 @@ namespace AcademiaDoZe.Domain.Repositories;
 
 public interface IColaboradorRepository
 {
+    Task<bool> ExisteAdministradorAsync(CancellationToken cancellationToken = default);
+    Task<Colaborador> CriarPrimeiroAdministradorAsync(Colaborador colaborador, CancellationToken cancellationToken = default);
+    Task<bool> PromoverPrimeiroAdministradorAsync(int id, CancellationToken cancellationToken = default);
     Task<int> ContarAsync(CancellationToken cancellationToken = default);
     Task<Colaborador?> ObterPorIdAsync(int id, CancellationToken cancellationToken = default);
     Task<IEnumerable<Colaborador>> ObterTodosAsync(CancellationToken cancellationToken = default);

@@ -9,4 +9,5 @@
   <ItemGroup><Compile Include="../AcademiaDoZe.Presentation.AppMaui/Services/PessoaCadastro.cs" Link="PessoaCadastro.cs" /></ItemGroup>
   <ItemGroup><Compile Include="../AcademiaDoZe.Presentation.AppMaui/Services/FotoConteudo.cs" Link="FotoConteudo.cs" /></ItemGroup>
   <ItemGroup><Compile Include="../AcademiaDoZe.Presentation.AppMaui/Services/MatriculaConsulta.cs" Link="MatriculaConsulta.cs" /></ItemGroup>
+  <ItemGroup><None Include="../AcademiaDoZe.Presentation.AppMaui/Resources/Strings/*.resx" Link="Localizacao/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" /></ItemGroup>
 </Project>

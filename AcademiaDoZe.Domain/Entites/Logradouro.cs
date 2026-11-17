@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using AcademiaDoZe.Domain.Common;
 using AcademiaDoZe.Domain.ValueObjects;
@@ -52,6 +52,6 @@ public class Logradouro : Entity
         if (notifications.Count > 0)
             return Result<Logradouro>.Failure(notifications);
 
-        return Result<Logradouro>.Success(new Logradouro(id, cep, nome, bairro, cidade, estado, pais));
+        return Result<Logradouro>.Success(new Logradouro(id, cep!, nome, bairro, cidade, estado, pais));
     }
 }

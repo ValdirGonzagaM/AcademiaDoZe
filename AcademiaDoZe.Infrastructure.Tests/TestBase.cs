@@ -1,4 +1,4 @@
-﻿using AcademiaDoZe.Domain.Entities;
+using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Domain.Enums;
 using AcademiaDoZe.Domain.ValueObjects;
 using AcademiaDoZe.Infrastructure.Repositories;
@@ -8,7 +8,8 @@ using AcademiaDoZe.Infrastructure.Repositories;
 namespace AcademiaDoZe.Infrastructure.Tests;
 public abstract class TestBase
 {
-    protected string ConnectionString => "Server=localhost;Port=3307;Database=db_academia;Uid=root;Pwd=Miguel123!;";
+    protected string ConnectionString => Environment.GetEnvironmentVariable("ACADEMIA_TEST_MYSQL")
+        ?? throw new InvalidOperationException("Defina ACADEMIA_TEST_MYSQL com a conexão do banco MySQL de testes.");
     protected DatabaseType DatabaseType => DatabaseType.MySQL;
 
     protected async Task<Logradouro> CriarEInserirLogradouroAsync(string? cepPersonalizado = null)

@@ -1,41 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="AcademiaDoZe.Presentation.AppMaui.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:AcademiaDoZe.Presentation.AppMaui"
-    xmlns:views="clr-namespace:AcademiaDoZe.Presentation.AppMaui.Views"
-    Title="Academia do Zé">
-
-    <FlyoutItem Title="Início">
-        <ShellContent
-            Title="Início"
-            ContentTemplate="{DataTemplate local:MainPage}"
-            Route="MainPage" />
-    </FlyoutItem>
-
-    <FlyoutItem Title="Colaboradores">
-        <ShellContent Title="Colaboradores" ContentTemplate="{DataTemplate views:ColaboradorListPage}" Route="ColaboradorListPage" />
-    </FlyoutItem>
-    <FlyoutItem Title="Alunos">
-        <ShellContent Title="Alunos" ContentTemplate="{DataTemplate views:AlunoListPage}" Route="AlunoListPage" />
-    </FlyoutItem>
-    <FlyoutItem Title="Logradouros">
-        <ShellContent
-            Title="Logradouros"
-            ContentTemplate="{DataTemplate views:LogradouroListPage}"
-            Route="LogradouroListPage" />
-    </FlyoutItem>
-
-    <FlyoutItem Title="Matrículas">
-        <ShellContent Title="Matrículas" ContentTemplate="{DataTemplate views:MatriculaListPage}" Route="MatriculaListPage" />
-    </FlyoutItem>
-
-    <FlyoutItem Title="Configurações">
-        <ShellContent
-            Title="Configurações"
-            ContentTemplate="{DataTemplate views:ConfiguracoesPage}"
-            Route="ConfiguracoesPage" />
-    </FlyoutItem>
-
+<Shell x:Class="AcademiaDoZe.Presentation.AppMaui.AppShell"
+ xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+ xmlns:local="clr-namespace:AcademiaDoZe.Presentation.AppMaui" xmlns:views="clr-namespace:AcademiaDoZe.Presentation.AppMaui.Views"
+ Title="Academia do Zé" FlyoutBehavior="Disabled">
+ <Shell.FlyoutHeader>
+  <VerticalStackLayout Padding="24" Spacing="8" BackgroundColor="#152533">
+   <Label Text="ACADEMIA DO ZÉ" TextColor="White" FontSize="22" FontAttributes="Bold" />
+   <Label Text="Valdir Gonzaga" TextColor="#F0B5AD" FontSize="14" />
+  </VerticalStackLayout>
+ </Shell.FlyoutHeader>
+ <FlyoutItem x:Name="LoginItem" Title="Entrar"><ShellContent ContentTemplate="{DataTemplate views:LoginPage}" Route="LoginPage" /></FlyoutItem>
+ <FlyoutItem x:Name="InicioItem" Title="Início" IsVisible="False"><ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage" /></FlyoutItem>
+ <FlyoutItem x:Name="AcessosItem" Title="Entrada e saída" IsVisible="False"><ShellContent ContentTemplate="{DataTemplate views:AcessoPage}" Route="AcessoPage" /></FlyoutItem>
+ <FlyoutItem x:Name="ColaboradoresItem" Title="Colaboradores" IsVisible="False"><ShellContent ContentTemplate="{DataTemplate views:ColaboradorListPage}" Route="ColaboradorListPage" /></FlyoutItem>
+ <FlyoutItem x:Name="AlunosItem" Title="Alunos" IsVisible="False"><ShellContent ContentTemplate="{DataTemplate views:AlunoListPage}" Route="AlunoListPage" /></FlyoutItem>
+ <FlyoutItem x:Name="LogradourosItem" Title="Logradouros" IsVisible="False"><ShellContent ContentTemplate="{DataTemplate views:LogradouroListPage}" Route="LogradouroListPage" /></FlyoutItem>
+ <FlyoutItem x:Name="MatriculasItem" Title="Matrículas" IsVisible="False"><ShellContent ContentTemplate="{DataTemplate views:MatriculaListPage}" Route="MatriculaListPage" /></FlyoutItem>
+ <FlyoutItem x:Name="RelatoriosItem" Title="Relatórios" IsVisible="False"><ShellContent ContentTemplate="{DataTemplate views:RelatoriosPage}" Route="RelatoriosPage" /></FlyoutItem>
+ <FlyoutItem x:Name="ContaItem" Title="Minha conta" IsVisible="False"><ShellContent ContentTemplate="{DataTemplate views:MinhaContaPage}" Route="MinhaContaPage" /></FlyoutItem>
+ <FlyoutItem x:Name="ConfiguracoesItem" Title="Configurações" IsVisible="False"><ShellContent ContentTemplate="{DataTemplate views:ConfiguracoesPage}" Route="ConfiguracoesPage" /></FlyoutItem>
+ <MenuItem x:Name="SairItem" Text="Sair da conta" IsEnabled="False" Clicked="OnSairClicked" />
 </Shell>

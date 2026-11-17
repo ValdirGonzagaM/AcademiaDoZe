@@ -57,12 +57,12 @@ public class PessoaListPage : ContentPage
             excluir.Clicked += async (_, _) =>
             {
                 if (_ocupado || excluir.BindingContext is not PessoaDto pessoa) return;
-                if (!await DisplayAlertAsync("Excluir cadastro", $"Excluir {pessoa.Nome} (CPF {pessoa.Cpf})?", "Excluir", "Cancelar")) return;
+                if (!await this.AvisoAsync("Excluir cadastro", Texto.F("Excluir {0} (CPF {1})?", pessoa.Nome, pessoa.Cpf), "Excluir", "Cancelar")) return;
                 await ExecutarAsync(async () =>
                 {
                     if (!await _cadastro.ExcluirAsync(pessoa)) throw new InvalidOperationException("Cadastro não encontrado.");
                     _pessoas.Remove(pessoa); AtualizarStatus();
-                    await DisplayAlertAsync("Cadastro excluído", "A exclusão foi concluída.", "OK");
+                    await this.AvisoAsync("Cadastro excluído", "A exclusão foi concluída.", "OK");
                 });
             };
             var identificacao = new Label { FontSize = 12 };
@@ -81,7 +81,7 @@ public class PessoaListPage : ContentPage
             card.BindingContextChanged += (_, _) =>
             {
                 profissional.Text = card.BindingContext is ColaboradorDto c
-                    ? $"{c.Tipo.GetDisplayName()} · {c.Vinculo.GetDisplayName()} · Admissão: {c.DataAdmissao:dd/MM/yyyy}" : "";
+                    ? Texto.F("{0} · {1} · Admissão: {2:d}", Texto.T(c.Tipo.GetDisplayName()), Texto.T(c.Vinculo.GetDisplayName()), c.DataAdmissao) : "";
                 var bytes = (card.BindingContext as PessoaDto)?.Foto?.Conteudo;
                 foto.Source = bytes is { Length: > 0 } ? ImageSource.FromStream(() => new MemoryStream(bytes)) : "logo_aluno.png";
             };
@@ -98,13 +98,13 @@ public class PessoaListPage : ContentPage
         _pessoas.Clear(); foreach (var pessoa in pessoas) _pessoas.Add(pessoa);
         AtualizarStatus();
     });
-    private void AtualizarStatus() => _status.Text = _pessoas.Count == 0 ? "Nenhum cadastro encontrado." : $"{_pessoas.Count} cadastro(s) encontrado(s)";
+    private void AtualizarStatus() => _status.Text = _pessoas.Count == 0 ? Texto.T("Nenhum cadastro encontrado.") : Texto.F("{0} cadastro(s) encontrado(s)", _pessoas.Count);
     private async Task ExecutarAsync(Func<Task> action)
     {
         if (_ocupado) return;
         _ocupado = true; _atividade.IsRunning = true;
         try { await action(); }
-        catch (Exception ex) { _status.Text = "Não foi possível concluir a operação."; await DisplayAlertAsync("Atenção", ex.Message, "OK"); }
+        catch (Exception ex) { _status.Text = "Não foi possível concluir a operação."; await this.AvisoAsync("Atenção", ex.Message, "OK"); }
         finally { _ocupado = false; _atividade.IsRunning = false; }
     }
 }

@@ -46,6 +46,8 @@ public static class PasswordHasher
         if (!int.TryParse(parts[2], out int mKb)) return false;
         if (!int.TryParse(parts[3], out int p)) return false;
 
+        if (t is < 1 or > 10 || mKb is < 8192 or > 262144 || p is < 1 or > 64) return false;
+
         byte[] salt;
         byte[] expected;
 
@@ -59,10 +61,12 @@ public static class PasswordHasher
             return false;
         }
 
+        if (salt.Length < 8 || salt.Length > 64 || expected.Length != HashSize) return false;
+
         using var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password))
         {
             Salt = salt,
-            DegreeOfParallelism = Math.Max(1, p),
+            DegreeOfParallelism = p,
             MemorySize = mKb,
             Iterations = Math.Max(1, t)
         };

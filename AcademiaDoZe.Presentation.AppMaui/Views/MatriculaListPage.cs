@@ -56,10 +56,10 @@ public sealed class MatriculaListPage : ContentPage
                 if (excluir.BindingContext is not MatriculaDto item) return;
                 await ExecutarAsync(async () =>
                 {
-                    if (!await DisplayAlertAsync("Excluir matrícula", $"Excluir a matrícula {item.Id} de {item.AlunoMatricula.Nome}?", "Excluir", "Cancelar")) return;
+                    if (!await this.AvisoAsync("Excluir matrícula", Texto.F("Excluir a matrícula {0} de {1}?", item.Id, item.AlunoMatricula.Nome), "Excluir", "Cancelar")) return;
                     if (!await _matriculas.RemoverAsync(item.Id)) throw new KeyNotFoundException("Matrícula não encontrada.");
                     _itens.Remove(item); AtualizarStatus();
-                    await DisplayAlertAsync("Sucesso", "Matrícula excluída.", "OK");
+                    await this.AvisoAsync("Sucesso", "Matrícula excluída.", "OK");
                 });
             };
             var card = new Border { Padding = 16, Margin = new Thickness(0, 6), StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 16 },
@@ -69,12 +69,12 @@ public sealed class MatriculaListPage : ContentPage
             {
                 if (card.BindingContext is not MatriculaDto item) return;
                 aluno.Text = item.AlunoMatricula.Nome;
-                identificacao.Text = $"Matrícula: {item.Id} · Aluno: {item.AlunoMatricula.Id}\nCPF: {item.AlunoMatricula.Cpf} · Nascimento: {item.AlunoMatricula.DataNascimento:dd/MM/yyyy}";
+                identificacao.Text = Texto.F("Matrícula: {0} · Aluno: {1}\nCPF: {2} · Nascimento: {3:d}", item.Id, item.AlunoMatricula.Id, item.AlunoMatricula.Cpf, item.AlunoMatricula.DataNascimento);
                 var hoje = DateOnly.FromDateTime(DateTime.Today);
                 var situacao = item.DataFim < hoje ? "Encerrada" : item.DataInicio > hoje ? "Agendada" : "Ativa";
-                periodo.Text = $"{item.Plano.GetDisplayName()} · {item.DataInicio:dd/MM/yyyy} a {item.DataFim:dd/MM/yyyy} · {situacao}\nObjetivo: {item.Objetivo}";
-                restricoes.Text = "Restrições: " + item.RestricoesMedicas.GetDisplayName();
-                observacoes.Text = "Observações: " + (string.IsNullOrWhiteSpace(item.ObservacoesRestricoes) ? "Não informadas" : item.ObservacoesRestricoes);
+                periodo.Text = Texto.F("{0} · {1:d} a {2:d} · {3}\nObjetivo: {4}", Texto.T(item.Plano.GetDisplayName()), item.DataInicio, item.DataFim, Texto.T(situacao), item.Objetivo);
+                restricoes.Text = Texto.T("Restrições: ") + Texto.T(item.RestricoesMedicas.GetDisplayName());
+                observacoes.Text = Texto.T("Observações: ") + (string.IsNullOrWhiteSpace(item.ObservacoesRestricoes) ? Texto.T("Não informadas") : item.ObservacoesRestricoes);
                 laudo.Text = item.LaudoMedico?.Conteudo is { Length: > 0 } ? "Laudo médico anexado" : "Sem laudo médico";
                 var bytes = item.AlunoMatricula.Foto?.Conteudo;
                 foto.Source = bytes is { Length: > 0 } ? ImageSource.FromStream(() => new MemoryStream(bytes)) : "logo_aluno.png";
@@ -92,13 +92,13 @@ public sealed class MatriculaListPage : ContentPage
         var resultado = await _consulta.BuscarAsync(_filtro.SelectedItem as string ?? "Todas", _busca.Text ?? "");
         _itens.Clear(); foreach (var item in resultado) _itens.Add(item); AtualizarStatus();
     });
-    private void AtualizarStatus() => _status.Text = _itens.Count == 0 ? "Nenhuma matrícula encontrada." : $"{_itens.Count} matrícula(s) encontrada(s)";
+    private void AtualizarStatus() => _status.Text = _itens.Count == 0 ? Texto.T("Nenhuma matrícula encontrada.") : Texto.F("{0} matrícula(s) encontrada(s)", _itens.Count);
     private async Task ExecutarAsync(Func<Task> acao)
     {
         if (_ocupado) return;
         _ocupado = true; _atividade.IsRunning = true;
         try { await acao(); }
-        catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); await DisplayAlertAsync("Atenção", ex.Message, "OK"); }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); await this.AvisoAsync("Atenção", ex.Message, "OK"); }
         finally { _ocupado = false; _atividade.IsRunning = false; }
     }
 }

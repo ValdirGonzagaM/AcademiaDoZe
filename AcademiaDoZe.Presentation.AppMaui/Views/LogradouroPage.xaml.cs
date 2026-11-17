@@ -23,5 +23,7 @@ public partial class LogradouroPage : ContentPage, IQueryAttributable
     {
         base.OnAppearing();
         await _viewModel.CarregarAsync(_id);
+        _viewModel.AtualizarIdioma();
+        Localizador.Atual.Aplicar(this);
     }
 }

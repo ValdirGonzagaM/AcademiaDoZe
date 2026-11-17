@@ -3,14 +3,12 @@
  x:Class="AcademiaDoZe.Presentation.AppMaui.Views.LogradouroListPage" x:Name="PaginaLogradouros" Title="Logradouros">
  <Grid Padding="20" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" RowSpacing="12">
   <Button Text="+ Novo logradouro" Command="{Binding AddLogradouroCommand}" />
-  <Picker Grid.Row="1" Title="Filtro" SelectedItem="{Binding SelectedFilterType}">
-   <Picker.Items><x:String>Nome</x:String><x:String>Cep</x:String><x:String>Cidade</x:String><x:String>Id</x:String></Picker.Items>
-  </Picker>
+  <Picker Grid.Row="1" Title="Filtro" ItemsSource="{Binding Filtros}" SelectedItem="{Binding SelectedFilterType}" />
   <SearchBar Grid.Row="2" Placeholder="Buscar endereço" Text="{Binding SearchText}" SearchCommand="{Binding SearchLogradourosCommand}" />
   <Button Grid.Row="3" Text="Buscar" Command="{Binding SearchLogradourosCommand}" />
   <HorizontalStackLayout Grid.Row="4" Spacing="12">
    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-   <Label Text="{Binding Logradouros.Count, StringFormat='{0} registro(s) encontrado(s)'}" />
+   <Label Text="{Binding QuantidadeTexto}" />
   </HorizontalStackLayout>
   <CollectionView Grid.Row="5" ItemsSource="{Binding Logradouros}" SelectionMode="None">
    <CollectionView.EmptyView><Label Text="Nenhum logradouro encontrado." /></CollectionView.EmptyView>

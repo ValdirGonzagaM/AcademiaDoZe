@@ -1,34 +1,48 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AcademiaDoZe.Presentation.AppMaui.MainPage" Title="Dashboard">
-    <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="20">
-            <Border BackgroundColor="#143D3B" StrokeShape="RoundRectangle 24" Padding="24">
-                <VerticalStackLayout Spacing="12">
-                    <Label Text="MOVIMENTO · CUIDADO · COMUNIDADE" FontSize="11" TextColor="#F0BD67" />
-                    <Image Source="logo_aluno.png" HeightRequest="170" Aspect="AspectFit"
-                           SemanticProperties.Description="Logotipo da Academia do Zé por Valdir Gonzaga" />
-                    <Label Text="Academia do Zé" FontSize="30" FontAttributes="Bold" TextColor="White" />
-                    <Label Text="Valdir Gonzaga" FontSize="18" TextColor="#F0BD67" />
-                </VerticalStackLayout>
-            </Border>
-            <Label Text="Sua academia, mais próxima das pessoas." FontSize="22" FontAttributes="Bold" />
-            <Label Text="Gerencie a equipe e os alunos com cadastros completos e fotos." />
-            <Label x:Name="TotalMatriculasLabel" Text="Consultando matrículas…" />
-            <Button Text="Gerenciar matrículas →" Clicked="OnMatriculasClicked" />
-            <Label x:Name="TotalColaboradoresLabel" Text="Consultando colaboradores…" />
-            <Button Text="Gerenciar colaboradores →" Clicked="OnColaboradoresClicked" />
-            <Label x:Name="TotalAlunosLabel" Text="Consultando alunos…" />
-            <Button Text="Gerenciar alunos →" Clicked="OnAlunosClicked" />
-            <Border Padding="16" StrokeShape="RoundRectangle 16">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="Comece pelo endereço" FontAttributes="Bold" />
-                    <Label Text="Cadastre um logradouro e depois vincule os alunos e colaboradores." />
-                    <Label x:Name="TotalLogradourosLabel" Text="Consultando total de logradouros…" />
-                    <Button Text="Abrir logradouros" Clicked="OnLogradourosClicked" />
-                </VerticalStackLayout>
-            </Border>
-        </VerticalStackLayout>
-    </ScrollView>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+ x:Class="AcademiaDoZe.Presentation.AppMaui.MainPage" Title="Início">
+ <ScrollView><VerticalStackLayout Padding="24" Spacing="22" MaximumWidthRequest="1200">
+  <Border BackgroundColor="#152533" StrokeThickness="0" StrokeShape="RoundRectangle 24" Padding="24">
+   <Grid x:Name="HeroGrid" ColumnDefinitions="Auto,*" ColumnSpacing="28" RowSpacing="20">
+    <Border x:Name="LogoBorder" BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 18" Padding="8">
+     <Image Source="logo_aluno.png" WidthRequest="220" HeightRequest="220" Aspect="AspectFit" SemanticProperties.Description="Academia do Zé — Valdir Gonzaga" />
+    </Border>
+    <VerticalStackLayout x:Name="HeroTexto" Grid.Column="1" Spacing="12" VerticalOptions="Center">
+     <Label Text="MOVIMENTO · SAÚDE · CONEXÃO" FontSize="11" CharacterSpacing="2" TextColor="#F0B5AD" />
+     <Label Text="Academia do Zé" FontSize="34" FontAttributes="Bold" TextColor="White" />
+     <Label Text="Valdir Gonzaga" FontSize="19" TextColor="#F0B5AD" />
+     <Label x:Name="BoasVindasLabel" TextColor="White" FontSize="16" />
+    </VerticalStackLayout>
+   </Grid>
+  </Border>
+  <Label Text="Seu próximo movimento" FontSize="25" FontAttributes="Bold" />
+  <Label Text="Acompanhe a rotina, cuide das pessoas e mantenha tudo em dia." />
+  <Border Padding="22" StrokeShape="RoundRectangle 20">
+   <VerticalStackLayout Spacing="12">
+    <Label Text="AGORA NA ACADEMIA" TextColor="#C73A36" FontSize="11" CharacterSpacing="1.5" />
+    <Label x:Name="OcupacaoLabel" FontSize="22" FontAttributes="Bold" />
+    <Button Text="Registrar entrada ou saída" Clicked="OnAcessosClicked" AutomationId="AbrirAcessos" />
+   </VerticalStackLayout>
+  </Border>
+  <Grid x:Name="MetricasGrid" ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="16">
+   <Border x:Name="AlunosCard" Padding="22"><VerticalStackLayout Spacing="10">
+    <Label Text="Alunos" FontAttributes="Bold" FontSize="18" /><Label x:Name="TotalAlunosLabel" FontSize="32" FontAttributes="Bold" />
+    <Button Text="Gerenciar alunos" Clicked="OnAlunosClicked" BackgroundColor="#27455B" />
+   </VerticalStackLayout></Border>
+   <Border x:Name="ColaboradoresCard" Grid.Column="1" Padding="22"><VerticalStackLayout Spacing="10">
+    <Label Text="Equipe" FontAttributes="Bold" FontSize="18" /><Label x:Name="TotalColaboradoresLabel" FontSize="32" FontAttributes="Bold" />
+    <Button Text="Gerenciar colaboradores" Clicked="OnColaboradoresClicked" BackgroundColor="#27455B" />
+   </VerticalStackLayout></Border>
+   <Border x:Name="MatriculasCard" Grid.Row="1" Padding="22"><VerticalStackLayout Spacing="10">
+    <Label Text="Matrículas" FontAttributes="Bold" FontSize="18" /><Label x:Name="TotalMatriculasLabel" FontSize="32" FontAttributes="Bold" />
+    <Button Text="Gerenciar matrículas" Clicked="OnMatriculasClicked" BackgroundColor="#27455B" />
+   </VerticalStackLayout></Border>
+   <Border x:Name="LogradourosCard" Grid.Row="1" Grid.Column="1" Padding="22"><VerticalStackLayout Spacing="10">
+    <Label Text="Endereços" FontAttributes="Bold" FontSize="18" /><Label x:Name="TotalLogradourosLabel" FontSize="32" FontAttributes="Bold" />
+    <Button Text="Abrir logradouros" Clicked="OnLogradourosClicked" BackgroundColor="#27455B" />
+   </VerticalStackLayout></Border>
+  </Grid>
+  <Button x:Name="RelatoriosButton" Text="Ver indicadores e relatórios" Clicked="OnRelatoriosClicked" />
+  <Button Text="Minha conta" Clicked="OnContaClicked" BackgroundColor="#27455B" />
+ </VerticalStackLayout></ScrollView>
 </ContentPage>

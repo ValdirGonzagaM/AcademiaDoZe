@@ -20,7 +20,8 @@ public partial class LogradouroViewModel : ObservableObject
     private bool _isBusy;
 
     public bool IsNotBusy => !IsBusy;
-    public string Titulo => Logradouro.Id == 0 ? "Novo logradouro" : "Editar logradouro";
+    public string Titulo => Texto.T(Logradouro.Id == 0 ? "Novo logradouro" : "Editar logradouro");
+    public void AtualizarIdioma() => OnPropertyChanged(nameof(Titulo));
     public IAsyncRelayCommand SaveCommand { get; }
     public IAsyncRelayCommand CancelCommand { get; }
 
@@ -52,7 +53,7 @@ public partial class LogradouroViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlertAsync("Atenção", ex.Message, "OK");
+            await Shell.Current.AvisoAsync("Atenção", ex.Message, "OK");
             await Shell.Current.GoToAsync("..");
         }
         finally { IsBusy = false; }
@@ -69,10 +70,10 @@ public partial class LogradouroViewModel : ObservableObject
                 await _logradouroService.AdicionarAsync(Logradouro);
             else
                 await _logradouroService.AtualizarAsync(Logradouro);
-            await Shell.Current.DisplayAlertAsync("Sucesso", "Logradouro salvo com sucesso!", "OK");
+            await Shell.Current.AvisoAsync("Sucesso", "Logradouro salvo com sucesso!", "OK");
             await Shell.Current.GoToAsync("..");
         }
-        catch (Exception ex) { await Shell.Current.DisplayAlertAsync("Atenção", ex.Message, "OK"); }
+        catch (Exception ex) { await Shell.Current.AvisoAsync("Atenção", ex.Message, "OK"); }
         finally { IsBusy = false; }
     }
 }

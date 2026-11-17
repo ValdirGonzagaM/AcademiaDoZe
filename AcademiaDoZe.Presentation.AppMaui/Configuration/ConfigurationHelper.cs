@@ -17,6 +17,7 @@ public static class ConfigurationHelper
         }.ToString();
         DatabaseInitializer.InitializeSqlite(connectionString);
         services.AddSingleton(new RepositoryConfig { ConnectionString = connectionString, DatabaseType = DatabaseType.Sqlite });
+        services.AddTransient<IAcessoRepository>(_ => new AcessoRepository(connectionString));
         services.AddTransient<IAlunoRepository>(_ => new AlunoRepository(connectionString, DatabaseType.Sqlite));
         services.AddTransient<IColaboradorRepository>(_ => new ColaboradorRepository(connectionString, DatabaseType.Sqlite));
         services.AddTransient<ILogradouroRepository>(_ => new LogradouroRepository(connectionString, DatabaseType.Sqlite));

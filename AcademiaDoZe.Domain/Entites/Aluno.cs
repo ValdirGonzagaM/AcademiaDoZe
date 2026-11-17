@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -58,7 +58,7 @@ public class Aluno : Pessoa
         if (telefoneResult.IsFailure)
             notifications.AddRange(telefoneResult.Notifications);
 
-        var emailResult = Email.Criar(email);
+        var emailResult = Email.Opcional(email);
         if (emailResult.IsFailure)
             notifications.AddRange(emailResult.Notifications);
 
