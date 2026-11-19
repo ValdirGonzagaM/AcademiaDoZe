@@ -19,9 +19,6 @@ public sealed class Localizador : INotifyPropertyChanged
     {
         if (cultura is not ("pt-BR" or "en-US" or "es-ES")) cultura = "pt-BR";
         Cultura = CultureInfo.GetCultureInfo(cultura);
-#if WINDOWS
-        global::Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = Cultura.Name;
-#endif
         CultureInfo.CurrentCulture = Cultura; CultureInfo.CurrentUICulture = Cultura;
         CultureInfo.DefaultThreadCurrentCulture = Cultura; CultureInfo.DefaultThreadCurrentUICulture = Cultura;
         Preferences.Default.Set("IdiomaApp", cultura);
